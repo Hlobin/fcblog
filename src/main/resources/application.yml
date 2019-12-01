@@ -1,0 +1,28 @@
+#启动端口
+server:
+  port: 8080
+
+#thymeleaf取消缓存
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/feiblog?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: root
+
+mybatis:
+  type-aliases-package: com.feicheng.blog.entity
+logging:
+  level:
+    com.feicheng.blog.mapper: debug
+
+#图片上传
+fdfs:
+  so-timeout: 1501 #超时时间
+  connect-timeout: 601 #连接超时时间
+  thumb-image:   #缩略图
+    width: 60
+    height: 60
+  tracker-list: #tracker地址：你的虚拟机服务器地址+端口（默认是22122）
+    - 123.57.64.9:22122
