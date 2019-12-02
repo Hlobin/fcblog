@@ -1,13 +1,20 @@
 package com.feicheng.blog.entity;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * 评论基本类
  * @author DrameCode
  */
+@Table(name = "comment")
 public class Comment {
 
+    @Id
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
 
     private String commentUserName;
@@ -80,14 +87,5 @@ public class Comment {
         this.commentUserId = commentUserId;
     }
 
-    // 非数据库字段
-    private Article article;
 
-    public Article getArticle() {
-        return article;
-    }
-
-    public void setArticle(Article article) {
-        this.article = article;
-    }
 }

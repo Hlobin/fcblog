@@ -31,7 +31,7 @@
           "child": [
             {
               "title": "网站用户",
-              "href": "/userController/showUserListUI",
+              "href": "/admin/user/list.html",
               "icon": "fa fa-list-alt",
               "target": "_self"
             },
@@ -63,7 +63,7 @@
             },
             {
               "title": "评论列表",
-              "href": "/commentController/showCommentListUI",
+              "href": "/admin/comment/list.html",
               "icon": "",
               "target": "_self"
             },
@@ -83,7 +83,7 @@
           "child": [
             {
               "title": "404页面",
-              "href": "page/404.html",
+              "href": "/admin/error.html",
               "icon": "fa fa-hourglass-end",
               "target": "_self"
             }

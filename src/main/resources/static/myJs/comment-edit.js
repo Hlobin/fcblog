@@ -16,24 +16,35 @@ layui.use(['form', 'layedit', 'laydate'], function () {
     //监听提交
     form.on("submit(editComment)", function (data) {
 
+        console.log(data);
+
         //弹出loading
         var index = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
 
-        $.post("/commentController/editComment",
+        $.post("/comment/edit",
             {
                 // 评论Id
                 id: $("#commentEditId").val(),
 
+                // 文章id
+                commentArticleId: $("#articleId").val(),
+
+                // 用户id
+                commentUserId: $("#userId").val(),
+
                 // 评论用户名
                 commentUserName: $("#commentUserName").val(),
 
+                // 用户邮箱
+                commentUserEmail: $("#commentUserEmail").val(),
+
                 // 评论的内容
-                commentContent: $("#commentContent").val(),
+                commentContent: $("#commentContent").val()
             },
 
             function (res) {
 
-                if (res.info == '请输入用户名称') {
+                if (res.info == '请输入评论用户名') {
 
                     layer.msg("请输入用户名称");
 

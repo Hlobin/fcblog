@@ -9,16 +9,6 @@
     <link rel="stylesheet" href="../../static/lib/layui-v2.5.4/css/layui.css" media="all">
     <link rel="stylesheet" href="../../static/css/public.css" media="all">
 </head>
-<style type="text/css">
-
-    .layui-table-cell {
-
-        height: 100px;
-
-    }
-
-</style>
-
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
@@ -35,21 +25,9 @@
                             </div>
                         </div>
                         <div class="layui-inline">
-                            <label class="layui-form-label">用户性别</label>
+                            <label class="layui-form-label">用户邮箱</label>
                             <div class="layui-input-inline">
-                                <input type="text" id="userSex" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">用户城市</label>
-                            <div class="layui-input-inline">
-                                <input type="text" id="userCity" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">用户职业</label>
-                            <div class="layui-input-inline">
-                                <input type="text" id="userClassify" autocomplete="off" class="layui-input">
+                                <input type="text" id="userEmail" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -82,30 +60,22 @@
 
             elem: '#currentTableId',
 
-            url: '/userController/showUserList',
+            url: '/user/list',
 
-            // cellMinWidth: 200,
             cols: [
                 [
                     {type: "checkbox", width: 50, fixed: "left"},
-                    {field: 'id', width: 50, title: 'ID', sort: true},
+                    {field: 'id', width: 100, title: 'ID', sort: true},
                     {field: 'userName', width: 80, title: '用户名'},
-                    {templet: '<div><img src="{{d.userImage}}"</div>', width: 135, title: '用户头像', height: 400},
-                    {field: 'userSex', width: 80, title: '性别', sort: true},
-                    {field: 'userCity', width: 80, title: '城市'},
-                    {field: 'userSign', title: '签名', minWidth: 150},
-                    {field: 'userPhone', width: 80, title: '手机号码', sort: true},
-                    {field: 'userEmail', width: 80, title: '邮箱', sort: true},
-                    {field: 'userClassify', width: 80, title: '职业'},
+                    {field: 'userEmail', width: 200, title: '邮箱'},
                     {
-                        field: 'userDate', title: '加入时间', align: 'center', minWidth: 110, templet: function (d) {
+                        field: 'userDate', title: '加入时间', width: 200 , templet: function (d) {
 
                             return d.userDate.substring(0, 10);
 
                         }
 
                     },
-                    {templet: '<div>{{createrFormat(d.authority.authorityName)}}</div>', width: 135, title: '用户类型'},
                     {title: '操作', minWidth: 50, templet: '#currentTableBar', fixed: "right", align: "center"}
                 ]
             ],
@@ -122,12 +92,7 @@
             // 获取搜索框的值
             var userName = $("#userName").val();
 
-            var userSex= $("#userSex").val();
-
-            var userCity = $("#userCity").val();
-
-            var userClassify = $("#userClassify").val();
-
+            var userEmail = $("#userEmail").val();
 
             //执行搜索重载
             table.reload('currentTableId', {
@@ -138,11 +103,7 @@
 
                         userName: userName,
 
-                        userSex:userSex,
-
-                        userCity:userCity,
-
-                        userClassify:userClassify
+                        userEmail: userEmail
                 }
             }, 'data');
 

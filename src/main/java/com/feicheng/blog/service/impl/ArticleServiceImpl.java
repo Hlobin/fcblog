@@ -80,4 +80,17 @@ public class ArticleServiceImpl implements ArticleService {
         // 执行添加
         this.articleMapper.insert(article);
     }
+
+    /**
+     * 根据id查询文章
+     * @param id
+     * @return
+     */
+    @Override
+    public Article selectArticleById(Integer id) {
+
+        Article article = this.articleMapper.selectByPrimaryKey(id);
+
+        return article;
+    }
 }

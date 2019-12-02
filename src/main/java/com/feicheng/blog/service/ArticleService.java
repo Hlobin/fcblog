@@ -16,4 +16,7 @@ public interface ArticleService {
 
     // 添加文章
     void addArticle(Article article);
+
+    // 根据id查询文章
+    Article selectArticleById(Integer id);
 }

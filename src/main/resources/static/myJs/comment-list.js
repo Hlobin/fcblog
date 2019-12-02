@@ -12,7 +12,7 @@ layui.use(['form', 'table'], function () {
 
         elem: '#currentTableId',
 
-        url: '/commentController/showCommentList',
+        url: '/comment/list',
 
         cols: [
             [
@@ -35,14 +35,7 @@ layui.use(['form', 'table'], function () {
 
                 },
 
-                {
-                    field: 'article', title: '评论文章标题', align: 'center', minWidth: 110, templet: function (d) {
-
-                        return d.article.articleName;
-
-                    }
-
-                },
+                {field: 'articleTitle', title: '评论文章标题'},
 
                 {title: '操作', minWidth: 50, templet: '#currentTableBar', fixed: "right", align: "center"}
 
@@ -93,7 +86,7 @@ layui.use(['form', 'table'], function () {
 
             type: 2,
 
-            content: "/commentController/showEditCommentUI",
+            content: "/admin/comment/edit.html",
 
             area:['400px','400px'],
 
@@ -105,7 +98,13 @@ layui.use(['form', 'table'], function () {
 
                     body.find("#commentEditId").val(edit.id);
 
+                    body.find("#articleId").val(edit.commentArticleId);
+
+                    body.find("#userId").val(edit.commentUserId);
+
                     body.find("#commentUserName").val(edit.commentUserName);
+
+                    body.find("#commentUserEmail").val(edit.commentUserEmail);
 
                     body.find("#commentContent").val(edit.commentContent);
 

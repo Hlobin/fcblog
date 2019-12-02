@@ -1,7 +1,9 @@
 package com.feicheng.blog.controller;
 
 import com.feicheng.blog.common.PageResult;
+import com.feicheng.blog.entity.Article;
 import com.feicheng.blog.entity.ArticleType;
+import com.feicheng.blog.service.ArticleService;
 import com.feicheng.blog.service.ArticleTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,9 @@ public class PageController {
     @Autowired
     private ArticleTypeService articleTypeService;
 
+    @Autowired
+    private ArticleService articleService;
+
     ////////////////////////////////////前台页面跳转/////////////////////////
 
     /**
@@ -27,7 +32,17 @@ public class PageController {
      * @return
      */
     @RequestMapping("index.html")
-    public String showIndex(){
+    public String showIndex(Model model){
+
+        // 查询最新添加和10条文章
+        PageResult<Article> pageResult = this.articleService.selectAllArticle(1, 10);
+
+        if (CollectionUtils.isEmpty(pageResult.getData())){
+
+            return "front/index";
+        }
+
+        model.addAttribute("articles", pageResult.getData());
 
         return "front/index";
     }
@@ -160,5 +175,48 @@ public class PageController {
         model.addAttribute("articleTypes", pageResult.getData());
 
         return "system/article-add";
+    }
+
+
+    /**
+     * 文章评论显示界面
+     * @return
+     */
+    @RequestMapping("admin/comment/list.html")
+    public String showCommentList(){
+
+        return "system/comment-list";
+    }
+
+
+    /**
+     * 文章评论编辑界面
+     * @return
+     */
+    @RequestMapping("admin/comment/edit.html")
+    public String showCommentEdit(){
+
+        return "system/comment-edit";
+    }
+
+
+    /**
+     * 网站用户显示界面
+     * @return
+     */
+    @RequestMapping("admin/user/list.html")
+    public String showUserList(){
+
+        return "system/user-list";
+    }
+
+    /**
+     * 404界面
+     * @return
+     */
+    @RequestMapping("admin/error.html")
+    public String showError(){
+
+        return "system/404";
     }
 }
