@@ -92,6 +92,7 @@ public class UploadServiceImpl implements UploadService {
             StorePath storePath = this.storageClient.uploadFile(
                     file.getInputStream(), file.getSize(), extension, null);
 
+            //TODO
             String imageUrl = "http://123.57.64.9/" + storePath.getFullPath();
 
             map.put("result", "success");

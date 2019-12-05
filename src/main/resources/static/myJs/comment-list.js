@@ -221,7 +221,7 @@ layui.use(['form', 'table'], function () {
 
                     type: 'post',
 
-                    url: '/commentController/deleteCommentById?commentId=' + data.id,
+                    url: '/comment/delete?commentId=' + data.id,
 
                     data: data.id,
 

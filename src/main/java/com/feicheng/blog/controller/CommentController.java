@@ -59,7 +59,7 @@ public class CommentController {
     @GetMapping("list")
     public ResponseEntity<PageResult<CommentExpend>> selectCommentByPage(@RequestParam("page") Integer page,
                                                                          @RequestParam("limit") Integer limit,
-                                                                         @RequestParam(name = "commentUserName" ,required = false) String commentUserName,
+                                                                         @RequestParam(name = "commentUserName", required = false) String commentUserName,
                                                                          @RequestParam(name = "commentContent", required = false) String commentContent,
                                                                          @RequestParam(name = "commentUserEmail", required = false) String commentUserEmail) {
 
@@ -83,6 +83,26 @@ public class CommentController {
     public ResponseEntity<ResponseResult> editComment(Comment comment) {
 
         Map<String, Object> map = this.commentService.editComment(comment);
+
+        if (StringUtils.equals(map.get("message").toString(), "error")) {
+
+            return ResponseEntity.ok(new ResponseResult(400, map.get("result").toString()));
+
+        }
+
+        return ResponseEntity.ok(new ResponseResult(200, map.get("result").toString()));
+    }
+
+
+    /**
+     * 根据id删除评论
+     * @param commentId
+     * @return
+     */
+    @PostMapping("delete")
+    public ResponseEntity<ResponseResult> deleteComment(@RequestParam("commentId") Integer commentId) {
+
+        Map<String, Object> map = this.commentService.deleteComment(commentId);
 
         if (StringUtils.equals(map.get("message").toString(), "error")) {
 

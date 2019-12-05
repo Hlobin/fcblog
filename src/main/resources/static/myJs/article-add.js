@@ -239,7 +239,7 @@ layui.use(['form', 'layer', 'layedit', 'laydate', 'upload'], function () {
         }, 500);
 
         return false;
-    })
+    });
 
 //预览
     form.on("submit(look)", function () {

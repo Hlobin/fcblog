@@ -9,10 +9,13 @@ import com.feicheng.blog.mapper.CommentMapper;
 import com.feicheng.blog.mapper.UserMapper;
 import com.feicheng.blog.pojo.CommentExpend;
 import com.feicheng.blog.service.CommentService;
+import com.feicheng.blog.utils.SendEmailUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -42,8 +45,15 @@ public class CommentServiceImpl implements CommentService {
     @Autowired(required = false)
     private ArticleMapper articleMapper;
 
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
     // 判断邮箱格式
     String emailRegex = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+
+    // 本人email地址
+    @Value("${myself.email}")
+    private String myselfEmail;
 
     /**
      * 添加评论
@@ -125,6 +135,9 @@ public class CommentServiceImpl implements CommentService {
             // 添加评论
             this.commentMapper.insertSelective(comment);
 
+            // 发送邮件消息
+            this.sendMsg("insert", comment.getId());
+
             map.put("message", "success");
 
             map.put("result", "评论成功");
@@ -146,6 +159,25 @@ public class CommentServiceImpl implements CommentService {
 
         return map;
     }
+
+    /**
+     * 发送消息
+     *
+     * @param type
+     * @param id
+     */
+    private void sendMsg(String type, Integer id) {
+
+        try {
+
+            this.amqpTemplate.convertAndSend("comment." + type, id);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 根据文章id查询该文章下的所有评论
@@ -192,19 +224,19 @@ public class CommentServiceImpl implements CommentService {
         Example.Criteria criteria = example.createCriteria();
 
         // 添加查询条件(根据网站用户名)
-        if (StringUtils.isNoneBlank(commentUserName)){
+        if (StringUtils.isNoneBlank(commentUserName)) {
 
             criteria.andLike("commentUserName", "%" + commentUserName + "%");
         }
 
         // 添加查询条件（根据用户邮箱）
-        if (StringUtils.isNoneBlank(commentUserEmail)){
+        if (StringUtils.isNoneBlank(commentUserEmail)) {
 
             criteria.andLike("commentUserEmail", "%" + commentUserEmail + "%");
         }
 
         // 添加查询条件（根据用户评论内容）
-        if (StringUtils.isNoneBlank(commentContent)){
+        if (StringUtils.isNoneBlank(commentContent)) {
 
             criteria.andLike("commentContent", "%" + commentContent + "%");
         }
@@ -309,5 +341,100 @@ public class CommentServiceImpl implements CommentService {
             return map;
         }
 
+    }
+
+
+    /**
+     * 评论消息发送到邮箱
+     *
+     * @param id
+     */
+    @Override
+    public void sendCommentToEmail(Integer id) {
+
+
+        // 根据id查询评论消息
+        Comment comment = this.commentMapper.selectByPrimaryKey(id);
+
+        // 根据文章id查询文章信息
+        Article article = this.articleMapper.selectByPrimaryKey(comment.getCommentArticleId());
+
+        // 将消息拼接成Html格式
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("<html>");
+
+        stringBuilder.append("<head>");
+
+        stringBuilder.append("<title>用户评论</title>");
+
+        stringBuilder.append("</head>");
+
+        stringBuilder.append("<body>");
+
+        stringBuilder.append("<p>用户ID：" + comment.getCommentUserId() + "</p>");
+
+        stringBuilder.append("<br>");
+
+        stringBuilder.append("<p>用户名：" + comment.getCommentUserName() + "</p>");
+
+        stringBuilder.append("<br>");
+
+        stringBuilder.append("<p>用户邮箱：" + comment.getCommentUserEmail() + "</p>");
+
+        stringBuilder.append("<br>");
+
+        stringBuilder.append("<p>文章标题：" + article.getArticleName() + "</p>");
+
+        stringBuilder.append("<br>");
+
+        stringBuilder.append("<p>评论内容：" + comment.getCommentContent() + "</p>");
+
+        stringBuilder.append("</body>");
+
+        stringBuilder.append("</html>");
+
+        SendEmailUtil.sendEmail(myselfEmail,stringBuilder.toString());
+    }
+
+    /**
+     * 根据commentId删除文章
+     *
+     * @param commentId
+     * @return
+     */
+    @Override
+    public Map<String, Object> deleteComment(Integer commentId) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        // 判断id是否为空
+        if (commentId == null) {
+
+            map.put("message", "error");
+
+            map.put("result", "参数错误");
+
+            return map;
+        }
+
+        // 执行删除
+        Integer count = this.commentMapper.deleteByPrimaryKey(commentId);
+
+        if (count > 0) {
+
+            map.put("message", "success");
+
+            map.put("result", "删除成功");
+
+            return map;
+        }
+
+
+        map.put("message", "error");
+
+        map.put("result", "删除失败");
+
+        return map;
     }
 }

@@ -14,8 +14,6 @@ layui.use(['form', 'table'], function () {
 
         url: '/adminController/showAdminList',
 
-        // cellMinWidth: 200,
-
         cols: [
             [
                 {type: "checkbox", width: 50, fixed: "left"},

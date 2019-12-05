@@ -11,12 +11,12 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
 
         table = layui.table;
 
-    //文章列表
+    //首页图片列表
     var tableIns = table.render({
 
         elem: '#newsList',
 
-        url: '/article/list',
+        url: '/picture/list',
 
         cellMinWidth: 95,
 
@@ -36,23 +36,37 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
 
                 {field: 'id', title: 'ID', width: 60, align: "center"},
 
-                {field: 'articleName', title: '文章标题', width: 350},
-
-                {field: 'articleAuthor', title: '发布者', align: 'center'},
-
-                {field: 'articleStatus', title: '发布状态', align: 'center', templet: "#newsStatus"},
-
-                {field: 'articleLook', title: '浏览权限', align: 'center'},
                 {
-                    field: 'articleTop', title: '是否置顶', align: 'center', templet: function (d) {
+                    field: 'pictureUrl',
 
-                        return '<input type="checkbox" name="articleTop" lay-filter="newsTop" lay-skin="switch" lay-text="是|否" ' + d.articleTop + '>'
+                    title: '图片',
+
+                    templet: function(d){
+
+                        return '<div ><img src="'+d.pictureUrl+'" alt="" width="50px" height="50px"></a></div>';
+
+                    }
+                },
+
+                {field: 'pictureTitle', title: '图片标题', width: 350},
+
+                {field: 'pictureContentUrl', title: '图片内容的URL', width: 350},
+
+                {field: 'pictureAuthor', title: '发布者', align: 'center'},
+
+                {field: 'pictureStatus', title: '发布状态', align: 'center', templet: "#newsStatus"},
+
+                {field: 'pictureLook', title: '浏览权限', align: 'center'},
+                {
+                    field: 'pictureTop', title: '是否置顶', align: 'center', templet: function (d) {
+
+                        return '<input type="checkbox" name="pictureTop" lay-filter="newsTop" lay-skin="switch" lay-text="是|否" ' + d.pictureTop + '>'
                     }
                 },
                 {
-                    field: 'articleDate', title: '发布时间', align: 'center', minWidth: 110, templet: function (d) {
+                    field: 'pictureDate', title: '发布时间', align: 'center', minWidth: 110, templet: function (d) {
 
-                        return d.articleDate.substring(0, 10);
+                        return d.pictureDate.substring(0, 10);
 
                     }
                 },
@@ -88,7 +102,7 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
                     curr: 1 //重新从第 1 页开始
                 },
                 where: {
-                    articleName: $(".searchVal").val()  //搜索的关键字
+                    pictureTitle: $(".searchVal").val()  //搜索的关键字
                 }
             })
         } else {
@@ -96,52 +110,45 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
         }
     });
 
-    //编辑文章
+    //编辑首页图片信息
     function editNews(edit) {
 
         var index = layui.layer.open({
 
-            title: "编辑文章",
+            title: "编辑首页图片信息",
 
             type: 2,
 
-            content: "/admin/article/edit.html",
+            content: "/admin/picture/edit.html",
 
             success: function (layero, index) {
 
                 var body = layui.layer.getChildFrame('body', index);
 
+                console.log(edit);
+
                 if (edit) {
 
-                    body.find(".newsName").val(edit.articleName);
+                    // 图片标题
+                    body.find(".pictureTitle").val(edit.pictureTitle);
 
-                    body.find(".abstract").val(edit.articleAbstract);
-
+                    // 修改图片的id
                     body.find("#id").attr("value", edit.id);
 
                     // 判断该文章是否有图片
 
-                    if (edit.articleImage != '') {
+                    if (edit.pictureUrl != '') {
 
-                        $("#test2").attr("class", "layui-btn layui-btn-radius layui-btn-disabled");
+                        body.find("#image").attr("src", edit.pictureUrl);
 
-                        body.find("#demo2").append('<img src="' + edit.articleImage + '" alt="" class="layui-upload-img" id="image">');
+                        body.find("#image").attr("width", "150px");
 
-                    }
-
-                    if (edit.articleImage == ''){
-
-                        $("#cleanImgs").attr("class", "layui-btn layui-btn-radius layui-btn-disabled");
+                        body.find("#image").attr("height", "150px");
 
                     }
+                    body.find(".openness input[name='openness'][title='" + edit.pictureLook + "']").prop("checked", "checked");
 
-                    body.find("#layeditDemo").val(edit.articleContent);
-
-                    body.find(".newsStatus select").val(edit.articleStatus);
-
-                    body.find(".openness input[name='openness'][title='" + edit.articleLook + "']").prop("checked", "checked");
-
-                    body.find(".newsTop input[name='newsTop']").prop("checked", edit.articleTop);
+                    body.find(".newsTop input[name='pictureTop']").prop("checked", edit.pictureTop);
 
                     form.render();
                 }
@@ -219,7 +226,7 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
         var index = layui.layer.open({
             title: "添加文章",
             type: 2,
-            content: "/admin/article/add.html"
+            content: "/admin/picture/add.html"
         });
 
         layui.layer.full(index);
@@ -230,7 +237,6 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
 
         })
     }
-
 
     //批量删除
     $(".delAll_btn").click(function () {
@@ -250,6 +256,8 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
             }
 
             newsIds = newsIds.substr(0, newsIds.length - 1);
+
+            console.log(newsIds);
 
             layer.confirm('确定删除选中的文章？', {icon: 3, title: '提示信息'}, function (index) {
 
@@ -295,9 +303,9 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
 
             layer.confirm('确定删除此文章？', {icon: 3, title: '提示信息'}, function (index) {
 
-                $.post("/article/delete", {
+                $.get("/articleController/deleteArticleById", {
 
-                        articleId: data.id  //将需要删除的articleId作为参数传入
+                        articleId: data.id  //将需要删除的newsId作为参数传入
 
                     },
                     function (data) {
@@ -310,9 +318,9 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
                             layer.close(index);
                         }
 
-                        if (data.info == '服务器错误') {
+                        if (data.info == '操作失败') {
 
-                            layer.msg("删除失败，请稍后再试");
+                            layer.msg("操作失败，请联系管理员");
 
                             layer.close(index);
                         }

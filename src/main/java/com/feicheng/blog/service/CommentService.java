@@ -23,4 +23,11 @@ public interface CommentService {
 
     // 修改评论
     Map<String, Object> editComment(Comment comment);
+
+
+    // 评论消息发送到邮箱
+    void sendCommentToEmail(Integer id);
+
+    // 根据id删除评论
+    Map<String, Object> deleteComment(Integer commentId);
 }

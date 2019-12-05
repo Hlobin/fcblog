@@ -6,6 +6,7 @@ import com.feicheng.blog.entity.Article;
 import com.feicheng.blog.entity.Comment;
 import com.feicheng.blog.service.ArticleService;
 import com.feicheng.blog.service.CommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文章控制器
@@ -40,7 +42,7 @@ public class ArticleController {
     public ResponseEntity<PageResult<Article>> selectAllArticle(@RequestParam("page") Integer page,
                                                                 @RequestParam("limit") Integer limit) {
 
-        PageResult<Article> pageResult = this.articleService.selectAllArticle(page, limit);
+        PageResult<Article> pageResult = this.articleService.selectArticleByDate(page, limit);
 
         if (CollectionUtils.isEmpty(pageResult.getData())) {
 
@@ -53,11 +55,12 @@ public class ArticleController {
 
     /**
      * 修改文章
+     *
      * @param article
      * @return
      */
     @PostMapping("edit")
-    public ResponseEntity<ResponseResult> editArticle(Article article){
+    public ResponseEntity<ResponseResult> editArticle(Article article) {
 
         // 修改文章
         this.articleService.editArticle(article);
@@ -68,11 +71,12 @@ public class ArticleController {
 
     /**
      * 添加文章
+     *
      * @param article
      * @return
      */
     @PostMapping("add")
-    public ResponseEntity<ResponseResult> addArticle(Article article){
+    public ResponseEntity<ResponseResult> addArticle(Article article) {
 
         // 添加文章
         this.articleService.addArticle(article);
@@ -83,11 +87,12 @@ public class ArticleController {
 
     /**
      * 根据id查询文章并跳转到详情页面
+     *
      * @param id
      * @return
      */
     @GetMapping("detail/{id}")
-    public String selectArticleById(@PathVariable("id") Integer id, Model model){
+    public String selectArticleById(@PathVariable("id") Integer id, Model model) {
 
         // 根据id查询文章信息
         Article article = this.articleService.selectArticleById(id);
@@ -95,7 +100,10 @@ public class ArticleController {
         // 根据文章id查询所有的该文章下的评论
         List<Comment> comments = this.commentService.selectAllCommentByArticleId(id);
 
-        if (article == null){
+        // 将该文章的浏览量加1
+        this.articleService.addArticleLook(id);
+
+        if (article == null) {
 
             model.addAttribute("commentCount", 0);
 
@@ -106,7 +114,7 @@ public class ArticleController {
             return "front/info";
         }
 
-        if (CollectionUtils.isEmpty(comments)){
+        if (CollectionUtils.isEmpty(comments)) {
 
 
             model.addAttribute("commentCount", 0);
@@ -127,4 +135,24 @@ public class ArticleController {
 
         return "front/info";
     }
+
+
+    /**
+     * 根据id删除文章
+     *
+     * @param id
+     * @return
+     */
+    @PostMapping("delete")
+    public ResponseEntity<ResponseResult> deleteArticle(@RequestParam("articleId") Integer id) {
+
+        Map<String, Object> map = this.articleService.deleteArticle(id);
+
+        if (StringUtils.equals(map.get("message").toString(), "error")) {
+
+            return ResponseEntity.ok(new ResponseResult(400, map.get("result").toString()));
+        }
+        return ResponseEntity.ok(new ResponseResult(200, map.get("result").toString()));
+    }
+
 }

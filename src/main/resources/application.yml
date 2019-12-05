@@ -6,16 +6,34 @@ server:
 spring:
   thymeleaf:
     cache: false
+   #数据库连接
   datasource:
     url: jdbc:mysql://localhost:3306/feiblog?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: root
     password: root
+   #消息队列配置
+  rabbitmq:
+    host: 123.57.64.9
+    virtual-host: /feicheng
+    username: feicheng
+    password: mengli090420
+    template:
+      exchange: BLOG.EXCHANGE
+   #redis缓存
+  redis:
+    host: 123.57.64.9
+    database: 0
 
+#mybatis别名配置
 mybatis:
   type-aliases-package: com.feicheng.blog.entity
+#Sql语句的打印
 logging:
   level:
     com.feicheng.blog.mapper: debug
+  config:
+    classpath: logback.xml
+
 
 #图片上传
 fdfs:
@@ -26,3 +44,10 @@ fdfs:
     height: 60
   tracker-list: #tracker地址：你的虚拟机服务器地址+端口（默认是22122）
     - 123.57.64.9:22122
+
+
+#自定义配置
+
+#本人用户Email
+myself:
+  email: 1692454247@qq.com
