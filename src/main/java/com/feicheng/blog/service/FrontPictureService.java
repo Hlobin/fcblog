@@ -24,4 +24,7 @@ public interface FrontPictureService {
 
     // 发送邮件信息到邮箱告知首页图片保存出错
     void sendRedisErrorToEmail(String message);
+
+    // 更新redis中的数据
+    void updateRedisData();
 }

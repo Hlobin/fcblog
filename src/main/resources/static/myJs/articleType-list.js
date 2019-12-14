@@ -10,9 +10,11 @@ layui.use(['form', 'table'], function () {
     // 文章分类列表
     var tableIns = table.render({
 
+        type:'GET',
+
         elem: '#currentTableId',
 
-        url: '/articleTypeController/showArticleTypeList',
+        url: '/articleType/list',
 
         cols: [
             [
@@ -46,7 +48,7 @@ layui.use(['form', 'table'], function () {
 
             area:['400px','400px'],
 
-            content: "/articleTypeController/showEditArticleTypeUI",
+            content: "/admin/articleType/edit.html",
 
             success: function (layero, index) {
 
@@ -108,7 +110,7 @@ layui.use(['form', 'table'], function () {
 
                     type: 'post',
 
-                    url: '/articleTypeController/deleteArticleTypeById?articleTypeId=' + data.id,
+                    url: '/articleType/delete?articleTypeId=' + data.id,
 
                     data: data.id,
 
@@ -172,7 +174,7 @@ layui.use(['form', 'table'], function () {
 
             type: 2,
 
-            content: "/articleTypeController/showAddArticleTypeUI"
+            content: "/admin/articleType/add.html"
 
         });
 

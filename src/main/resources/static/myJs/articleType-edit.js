@@ -19,12 +19,12 @@ layui.use(['form', 'layedit', 'laydate'], function () {
         //弹出loading
         var index = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
 
-        $.post("/articleTypeController/editArticleType",
+        $.post("/articleType/edit",
             {
-                // 管理员Id
+                // 文章类型id
                 id: $("#articleTypeId").val(),
 
-                // 管理员名称
+                // 文章类型名称
                 articleTypeName: $("#articleTypeName").val()
             },
 
@@ -44,7 +44,7 @@ layui.use(['form', 'layedit', 'laydate'], function () {
                     return;
                 }
 
-                if (res.info == '更新成功') {
+                if (res.info == '修改成功') {
 
                     setTimeout(function () {
 

@@ -1,28 +1,15 @@
 #启动端口
 server:
   port: 8080
+  tomcat:
+    uri-encoding: utf-8
 
 #thymeleaf取消缓存
 spring:
   thymeleaf:
     cache: false
-   #数据库连接
-  datasource:
-    url: jdbc:mysql://localhost:3306/feiblog?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
-    username: root
-    password: root
-   #消息队列配置
-  rabbitmq:
-    host: 123.57.64.9
-    virtual-host: /feicheng
-    username: feicheng
-    password: mengli090420
-    template:
-      exchange: BLOG.EXCHANGE
-   #redis缓存
-  redis:
-    host: 123.57.64.9
-    database: 0
+  profiles:
+    active: dev
 
 #mybatis别名配置
 mybatis:
@@ -33,21 +20,3 @@ logging:
     com.feicheng.blog.mapper: debug
   config:
     classpath: logback.xml
-
-
-#图片上传
-fdfs:
-  so-timeout: 1501 #超时时间
-  connect-timeout: 601 #连接超时时间
-  thumb-image:   #缩略图
-    width: 60
-    height: 60
-  tracker-list: #tracker地址：你的虚拟机服务器地址+端口（默认是22122）
-    - 123.57.64.9:22122
-
-
-#自定义配置
-
-#本人用户Email
-myself:
-  email: 1692454247@qq.com

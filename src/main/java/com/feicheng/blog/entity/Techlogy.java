@@ -1,16 +1,23 @@
 package com.feicheng.blog.entity;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * 管理员技术表
  * @author DrameCode
  */
-public class Techlogy implements Serializable {
+@Table(name = "techlogy")
+public class Techlogy{
 
+    @Id
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
 
-    private String techlogyName;
+    private String technologyName;
 
     public Integer getId() {
         return id;
@@ -20,11 +27,11 @@ public class Techlogy implements Serializable {
         this.id = id;
     }
 
-    public String getTechlogyName() {
-        return techlogyName;
+    public String getTechnologyName() {
+        return technologyName;
     }
 
-    public void setTechlogyName(String techlogyName) {
-        this.techlogyName = techlogyName;
+    public void setTechnologyName(String technologyName) {
+        this.technologyName = technologyName;
     }
 }

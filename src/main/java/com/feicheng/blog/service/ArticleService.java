@@ -34,4 +34,10 @@ public interface ArticleService {
 
     // 将文章发送到网站用户的邮箱
     void sendArticleToEmail(Integer id);
+
+    // 根据文章类型查询文章，并实现分页
+    PageResult<Article> selectArticleByType(Integer articleIndex, Integer articleLimit, Integer articleTypeId);
+
+    // 查询浏览量前六的文章
+    PageResult<Article> selectArticleByClick(Integer articleClickPage, Integer articleClickLimit);
 }

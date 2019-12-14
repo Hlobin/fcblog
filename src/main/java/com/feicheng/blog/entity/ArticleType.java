@@ -1,5 +1,11 @@
 package com.feicheng.blog.entity;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,10 +13,14 @@ import java.util.List;
  * 文章分类
  * @author DrameCode
  */
+@Table(name = "article_type")
 public class ArticleType implements Serializable {
     
     private static final long serialVersionUID = -6128555229192708964L;
 
+    @Id
+    @KeySql(useGeneratedKeys = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String articleTypeName;
@@ -49,16 +59,5 @@ public class ArticleType implements Serializable {
 
     public void setArticleTypeDelete(Integer articleTypeDelete) {
         this.articleTypeDelete = articleTypeDelete;
-    }
-
-    // 非数据库字段
-    private List<Article> articles;
-
-    public List<Article> getArticles() {
-        return articles;
-    }
-
-    public void setArticles(List<Article> articles) {
-        this.articles = articles;
     }
 }

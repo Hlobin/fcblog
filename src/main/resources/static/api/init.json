@@ -37,7 +37,7 @@
             },
             {
               "title": "个人信息管理",
-              "href": "/admin/error.html",
+              "href": "/admin/myself.html",
               "icon": "fa fa-list-alt",
               "target": "_self"
             },
@@ -95,7 +95,7 @@
             },
             {
               "title": "分类管理",
-              "href": "/articleTypeController/showArticleTypeListUI",
+              "href": "/admin/articleType/list.html",
               "icon": "",
               "target": "_self"
             }

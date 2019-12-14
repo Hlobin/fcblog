@@ -11,11 +11,11 @@ import com.feicheng.blog.service.ArticleService;
 import com.feicheng.blog.utils.SendEmailUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import net.bytebuddy.asm.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -48,6 +48,10 @@ public class ArticleServiceImpl implements ArticleService {
     private AmqpTemplate amqpTemplate;
 
     private static Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
+
+    // 本机使用IP地址
+    @Value("${myself.address}")
+    private String myselfAddress;
 
     /**
      * 查询所有的文章并实现分页
@@ -292,20 +296,20 @@ public class ArticleServiceImpl implements ArticleService {
 
         stringBuilder.append("<p>文章标题：" + article.getArticleName() + "</p>");
 
-        stringBuilder.append("<br>");
-
         stringBuilder.append("<p>文章发起人：" + article.getArticleAuthor() + "</p>");
 
-        stringBuilder.append("<br>");
-
-        stringBuilder.append("<p>文章链接地址：" + "http://localhost:8080/article/detail/" + article.getId() + "</p>");
+        stringBuilder.append("<p>文章链接地址：" + myselfAddress + "article/detail/" + article.getId() + "</p>");
 
         stringBuilder.append("</body>");
 
         stringBuilder.append("</html>");
 
+        Example example = Example.builder(User.class).select("userEmail").build();
+
+        example.setDistinct(true);
+
         // 查询所有的网站用户
-        List<User> users = this.userMapper.selectAll();
+        List<User> users = this.userMapper.selectByExample(example);
 
         if (CollectionUtils.isEmpty(users)) {
 
@@ -324,12 +328,81 @@ public class ArticleServiceImpl implements ArticleService {
                 // 休息1秒
                 Thread.sleep(1000);
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
                 e.printStackTrace();
             }
 
         }
 
+    }
+
+    /**
+     * 根据文章类型查询文章并实现分页
+     *
+     * @param articleIndex
+     * @param articleLimit
+     * @param articleTypeId
+     * @return
+     */
+    @Override
+    public PageResult<Article> selectArticleByType(Integer articleIndex, Integer articleLimit, Integer articleTypeId) {
+
+        // 创建分页查询起始页
+        PageHelper.startPage(articleIndex, articleLimit);
+
+        // 创建模板
+        Example example = new Example(Article.class);
+
+        example.orderBy("articleDate").desc();
+
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("articleTypeId", articleTypeId);
+
+        // 执行查询
+        List<Article> articles = this.articleMapper.selectByExample(example);
+
+        // 判断是否有值
+        if (CollectionUtils.isEmpty(articles)) {
+
+            return new PageResult<>(404, "无数据", 0, null);
+
+        }
+
+        PageInfo<Article> pageInfo = new PageInfo<>(articles);
+
+        return new PageResult<>(0, "查询成功", (int) pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
+     * 查询浏览量前六的文章
+     *
+     * @param articleClickPage
+     * @param articleClickLimit
+     * @return
+     */
+    @Override
+    public PageResult<Article> selectArticleByClick(Integer articleClickPage, Integer articleClickLimit) {
+
+        PageHelper.startPage(articleClickPage, articleClickLimit);
+
+        // 创建模板
+        Example example = new Example(Article.class);
+
+        // 设置排序
+        example.orderBy("articleRead").desc();
+
+        // 执行查询
+        List<Article> articles = this.articleMapper.selectByExample(example);
+
+        if (CollectionUtils.isEmpty(articles)) {
+
+            return new PageResult<>(404, "无数据", 0, null);
+        }
+
+        PageInfo<Article> pageInfo = new PageInfo<>(articles);
+
+        return new PageResult<>(200, "查询成功", (int) pageInfo.getTotal(), pageInfo.getList());
     }
 }

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +38,10 @@ public class UploadServiceImpl implements UploadService {
     private static final List<String> CONTENT_TYPES = Arrays.asList("image/gif", "image/jpeg");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadServiceImpl.class);
+
+    // 本机使用IP地址
+    @Value("${myself.image.address}")
+    private String myselfImageAddress;
 
     /**
      * 上传文章图片
@@ -93,7 +98,7 @@ public class UploadServiceImpl implements UploadService {
                     file.getInputStream(), file.getSize(), extension, null);
 
             //TODO
-            String imageUrl = "http://123.57.64.9/" + storePath.getFullPath();
+            String imageUrl = myselfImageAddress + storePath.getFullPath();
 
             map.put("result", "success");
 

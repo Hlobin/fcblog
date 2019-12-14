@@ -2,12 +2,11 @@ package com.feicheng.blog.controller;
 
 import com.feicheng.blog.common.PageResult;
 import com.feicheng.blog.common.ResponseResult;
-import com.feicheng.blog.entity.Article;
-import com.feicheng.blog.entity.Comment;
-import com.feicheng.blog.service.ArticleService;
-import com.feicheng.blog.service.CommentService;
+import com.feicheng.blog.entity.*;
+import com.feicheng.blog.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +25,57 @@ import java.util.Map;
 @RequestMapping("article")
 public class ArticleController {
 
+    // 查询首页图片文章的起始位置
+    private static final Integer PICTURE_INDEX = 1;
+
+    // 查询首页图片文章的数量
+    private static final Integer PICTURE_LIMIT = 5;
+
+    // 查询首页标签的起始位置
+    private static final Integer ARTICLE_TYPE_INDEX = 1;
+
+    // 查询首页标签的数量
+    private static final Integer ARTICLE_TYPE_LIMIT = 10;
+
+    // 查询首页文章的起始位置
+    private static final Integer ARTICLE_INDEX = 1;
+
+    // 查询首页文章的数量
+    private static final Integer ARTICLE_LIMIT = 10;
+
     @Autowired
     private ArticleService articleService;
 
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private FrontPictureService frontPictureService;
+
+    @Autowired
+    private ArticleTypeService articleTypeService;
+
+    @Autowired
+    private MySelfService mySelfService;
+
+    @Autowired
+    private TechnologyService technologyService;
+
+    // 点击排行文章的起始位置
+    @Value("${article.click.page}")
+    private String articleClickPage;
+
+    // 点击排行文章的数量
+    @Value("${article.click.limit}")
+    private String articleClickLimit;
+
+    // 推荐文章的起始位置
+    @Value("${article.commond.page}")
+    private String articleCommondPage;
+
+    // 推荐文章的数量
+    @Value("${article.commond.limit}")
+    private String articleCommondLimit;
 
     /**
      * 查询所有的文章并实现分页
@@ -124,7 +168,6 @@ public class ArticleController {
             model.addAttribute("article", article);
 
             return "front/info";
-
         }
 
         model.addAttribute("comments", comments);
@@ -139,7 +182,6 @@ public class ArticleController {
 
     /**
      * 根据id删除文章
-     *
      * @param id
      * @return
      */
@@ -155,4 +197,51 @@ public class ArticleController {
         return ResponseEntity.ok(new ResponseResult(200, map.get("result").toString()));
     }
 
+    /**
+     * 根据文章标查询文章
+     *
+     * @param articleTypeId
+     * @return
+     */
+    @GetMapping("type/{articleTypeId}")
+    public String selectArticleByType(@PathVariable("articleTypeId") Integer articleTypeId, Model model) {
+
+
+        // 根据文章类型查询文章并实现分页
+        PageResult<Article> articlePageResult = this.articleService.selectArticleByType(ARTICLE_INDEX, ARTICLE_LIMIT, articleTypeId);
+
+        // 查询首页图片文章时间排序的5条文章
+        PageResult<FrontPicture> picturePageResult = this.frontPictureService.selectPictureByPageAndByDate(PICTURE_INDEX, PICTURE_LIMIT);
+
+        // 查询所有的10标签即分类--根据文章数量排序
+        PageResult<ArticleType> typePageResult = this.articleTypeService.selectArticleByPageAndCount(ARTICLE_TYPE_INDEX, ARTICLE_TYPE_LIMIT);
+
+        // 查询个人信息
+        MySelf mySelf = this.mySelfService.selectMySelf();
+
+        // 根据技能Id查询技能
+        Techlogy techlogy = this.technologyService.selectTechnologyById(mySelf.getTechnologyId());
+
+        // 查询浏览量前六的六篇文章
+        PageResult<Article> articleReads = this.articleService.selectArticleByClick(Integer.parseInt(articleClickPage), Integer.parseInt(articleClickLimit));
+
+        // 查询推荐文章
+        PageResult<Article> commondArticlePageResult = this.articleService.selectArticleByDate(Integer.parseInt(articleCommondPage), Integer.parseInt(articleCommondLimit));
+
+        model.addAttribute("articleTypes", typePageResult.getData());
+
+        model.addAttribute("pictures", picturePageResult.getData());
+
+        model.addAttribute("articles", articlePageResult.getData());
+
+        model.addAttribute("mySelf", mySelf);
+
+        model.addAttribute("technologyName", techlogy.getTechnologyName());
+
+        model.addAttribute("articleReads", articleReads.getData());
+
+        model.addAttribute("articleCommonds", commondArticlePageResult.getData());
+
+        return "front/index";
+    }
 }

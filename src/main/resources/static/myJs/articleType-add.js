@@ -27,7 +27,7 @@ layui.use(['form', 'layer', 'layedit', 'laydate', 'upload'], function () {
         //弹出loading
         var index = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
 
-        $.post("/articleTypeController/addArticleType",
+        $.post("/articleType/add",
             {
 
                 articleTypeName: $("#articleTypeName").val(),
@@ -42,16 +42,9 @@ layui.use(['form', 'layer', 'layedit', 'laydate', 'upload'], function () {
                     return;
                 }
 
-                if (res.info == '分类名称已存在'){
+                if (res.info == '添加失败') {
 
-                    layer.msg("该分类名称已存在");
-
-                    return;
-                }
-
-                if (res.info == '操作失败') {
-
-                    layer.msg("操作失败，请联系管理员");
+                    layer.msg("添加失败，请联系管理员");
 
                     return;
                 }

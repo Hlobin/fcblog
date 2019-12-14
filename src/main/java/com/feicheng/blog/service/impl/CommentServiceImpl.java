@@ -374,19 +374,11 @@ public class CommentServiceImpl implements CommentService {
 
         stringBuilder.append("<p>用户ID：" + comment.getCommentUserId() + "</p>");
 
-        stringBuilder.append("<br>");
-
         stringBuilder.append("<p>用户名：" + comment.getCommentUserName() + "</p>");
-
-        stringBuilder.append("<br>");
 
         stringBuilder.append("<p>用户邮箱：" + comment.getCommentUserEmail() + "</p>");
 
-        stringBuilder.append("<br>");
-
         stringBuilder.append("<p>文章标题：" + article.getArticleName() + "</p>");
-
-        stringBuilder.append("<br>");
 
         stringBuilder.append("<p>评论内容：" + comment.getCommentContent() + "</p>");
 

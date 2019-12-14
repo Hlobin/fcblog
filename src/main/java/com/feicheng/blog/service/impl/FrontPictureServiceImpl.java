@@ -33,9 +33,6 @@ import java.util.Map;
 @Service
 public class FrontPictureServiceImpl implements FrontPictureService {
 
-    // 图片前缀链接地址
-    private static final String PICTURE_CONTENT_URL = "http://123.57.64.9:8080/article/detail/";
-
     // 首页图片存入redis中的key
     private static final String INDEX_PICTURE = "INDEX_PICTURE";
 
@@ -53,6 +50,9 @@ public class FrontPictureServiceImpl implements FrontPictureService {
     // 本人email地址
     @Value("${myself.email}")
     private String myselfEmail;
+
+    @Value("${myself.address}")
+    private String myselfAddress;
 
     /**
      * 分页查询首页图片
@@ -146,7 +146,7 @@ public class FrontPictureServiceImpl implements FrontPictureService {
 
         frontPicture.setPictureTop(frontPicture.getPictureTop().equals("checked") ? "checked" : "");
 
-        frontPicture.setPictureContentUrl(PICTURE_CONTENT_URL + frontPicture.getPictureContentUrl());
+        frontPicture.setPictureContentUrl(myselfAddress + "/article/detail/" + frontPicture.getPictureContentUrl());
 
         frontPicture.setPictureStatus(1);
 
@@ -154,6 +154,7 @@ public class FrontPictureServiceImpl implements FrontPictureService {
         this.frontPictureMapper.insertSelective(frontPicture);
 
         // 发送消息到消息队列通知已有数据更新
+        this.sendRedisMsg("insert");
 
         map.put("message", "success");
 
@@ -309,12 +310,15 @@ public class FrontPictureServiceImpl implements FrontPictureService {
 
         frontPicture.setPictureTop(frontPicture.getPictureTop().equals("checked") ? "checked" : "");
 
-        frontPicture.setPictureContentUrl(PICTURE_CONTENT_URL + frontPicture.getPictureContentUrl());
+        frontPicture.setPictureContentUrl(myselfAddress + "/article/detail/" + frontPicture.getPictureContentUrl());
 
         frontPicture.setPictureStatus(1);
 
         // 执行插入数据
         this.frontPictureMapper.updateByPrimaryKey(frontPicture);
+
+        // 发送消息通知已有数据更新
+        this.sendRedisMsg("update");
 
         map.put("message", "success");
 
@@ -359,6 +363,60 @@ public class FrontPictureServiceImpl implements FrontPictureService {
             e.printStackTrace();
 
             logger.error("邮件发送失败");
+        }
+    }
+
+    /**
+     * 更新redis中的数据信息
+     */
+    @Override
+    public void updateRedisData() {
+
+        // 判断是否有key值
+        Boolean hasKey = this.stringRedisTemplate.hasKey(INDEX_PICTURE);
+
+        // 若存在，则删除key值，重新载入数据
+        if (hasKey){
+
+            this.stringRedisTemplate.delete(INDEX_PICTURE);
+
+            // 从数据库中查询数据
+            PageHelper.startPage(1, 5);
+
+            // 创建模板
+            Example example = new Example(FrontPicture.class);
+
+            // 添加查询条件
+            example.orderBy("pictureDate").desc();
+
+            // 执行查询
+            List<FrontPicture> frontPictures = this.frontPictureMapper.selectByExample(example);
+
+            if (CollectionUtils.isEmpty(frontPictures)) {
+
+                return;
+
+            }
+
+            PageInfo<FrontPicture> pageInfo = new PageInfo<>(frontPictures);
+
+            try {
+                // 将从数据库中查询的数据放入到redis中
+                // 将list集合转换成json对象
+                String json = JsonUtils.serialize(pageInfo.getList());
+
+                // 保存到redis中
+                this.stringRedisTemplate.opsForValue().set(INDEX_PICTURE, json);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+                logger.error("数据保存到redis中出错");
+
+                // 当保存到redis中出错的时候，向我的邮箱发送信息
+                this.sendRedisMsg("error");
+            }
         }
     }
 }

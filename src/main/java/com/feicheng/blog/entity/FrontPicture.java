@@ -3,6 +3,8 @@ package com.feicheng.blog.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -16,6 +18,7 @@ public class FrontPicture {
 
     @Id
     @KeySql(useGeneratedKeys = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 图片标题
