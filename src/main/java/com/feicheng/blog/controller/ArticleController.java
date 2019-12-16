@@ -144,6 +144,15 @@ public class ArticleController {
         // 根据文章id查询所有的该文章下的评论
         List<Comment> comments = this.commentService.selectAllCommentByArticleId(id);
 
+        // 查询浏览量前六的六篇文章
+        PageResult<Article> articlePageResult = this.articleService.selectArticleByClick(Integer.parseInt(articleClickPage), Integer.parseInt(articleClickLimit));
+
+        // 查询推荐文章
+        PageResult<Article> commondArticlePageResult = this.articleService.selectArticleByDate(Integer.parseInt(articleCommondPage), Integer.parseInt(articleCommondLimit));
+
+        // 查询所有的10标签即分类--根据文章数量排序
+        PageResult<ArticleType> typePageResult = this.articleTypeService.selectArticleByPageAndCount(ARTICLE_TYPE_INDEX, ARTICLE_TYPE_LIMIT);
+
         // 将该文章的浏览量加1
         this.articleService.addArticleLook(id);
 
@@ -154,6 +163,12 @@ public class ArticleController {
             model.addAttribute("article", null);
 
             model.addAttribute("comments", null);
+
+            model.addAttribute("articleReads", articlePageResult.getData());
+
+            model.addAttribute("articleCommonds", commondArticlePageResult.getData());
+
+            model.addAttribute("articleTypes", typePageResult.getData());
 
             return "front/info";
         }
@@ -167,6 +182,12 @@ public class ArticleController {
 
             model.addAttribute("article", article);
 
+            model.addAttribute("articleReads", articlePageResult.getData());
+
+            model.addAttribute("articleCommonds", commondArticlePageResult.getData());
+
+            model.addAttribute("articleTypes", typePageResult.getData());
+
             return "front/info";
         }
 
@@ -175,6 +196,12 @@ public class ArticleController {
         model.addAttribute("commentCount", comments.size());
 
         model.addAttribute("article", article);
+
+        model.addAttribute("articleReads", articlePageResult.getData());
+
+        model.addAttribute("articleCommonds", commondArticlePageResult.getData());
+
+        model.addAttribute("articleTypes", typePageResult.getData());
 
         return "front/info";
     }
@@ -198,7 +225,7 @@ public class ArticleController {
     }
 
     /**
-     * 根据文章标查询文章
+     * 根据文章标签查询文章
      *
      * @param articleTypeId
      * @return

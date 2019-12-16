@@ -136,7 +136,33 @@ public class PageController {
      * @return
      */
     @RequestMapping("list.html")
-    public String showStudy() {
+    public String showStudy(Model model) {
+
+        // 查询时间排序最新添加和10条文章
+        PageResult<Article> pageResult = this.articleService.selectArticleByDate(ARTICLE_INDEX, ARTICLE_LIMIT);
+
+        // 查询首页图片文章时间排序的5条文章
+        PageResult<FrontPicture> picturePageResult = this.frontPictureService.selectPictureByPageAndByDate(PICTURE_INDEX, PICTURE_LIMIT);
+
+        // 查询所有的10标签即分类--根据文章数量排序
+        PageResult<ArticleType> typePageResult = this.articleTypeService.selectArticleByPageAndCount(ARTICLE_TYPE_INDEX, ARTICLE_TYPE_LIMIT);
+
+        // 查询浏览量前六的六篇文章
+        PageResult<Article> articlePageResult = this.articleService.selectArticleByClick(Integer.parseInt(articleClickPage), Integer.parseInt(articleClickLimit));
+
+        // 查询推荐文章
+        PageResult<Article> commondArticlePageResult = this.articleService.selectArticleByDate(Integer.parseInt(articleCommondPage), Integer.parseInt(articleCommondLimit));
+
+
+        model.addAttribute("articleTypes", typePageResult.getData());
+
+        model.addAttribute("articles", pageResult.getData());
+
+        model.addAttribute("pictures", picturePageResult.getData());
+
+        model.addAttribute("articleReads", articlePageResult.getData());
+
+        model.addAttribute("articleCommonds", commondArticlePageResult.getData());
 
         return "front/list";
     }
@@ -150,6 +176,17 @@ public class PageController {
     public String showAbout() {
 
         return "front/about";
+    }
+
+    /**
+     * 模板分享
+     *
+     * @return
+     */
+    @RequestMapping("share.html")
+    public String showShare() {
+
+        return "front/share";
     }
 
 
@@ -420,5 +457,17 @@ public class PageController {
         model.addAttribute("myself", mySelf);
 
         return "system/myself";
+    }
+
+
+    /**
+     * 显示慢生活界面
+     *
+     * @return
+     */
+    @RequestMapping("admin/life.html")
+    public String showLife() {
+
+        return "system/life-list";
     }
 }
