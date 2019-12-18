@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 页面跳转控制器
@@ -459,15 +460,25 @@ public class PageController {
         return "system/myself";
     }
 
-
     /**
-     * 显示慢生活界面
-     *
+     * 后台留言列表
      * @return
      */
-    @RequestMapping("admin/life.html")
-    public String showLife() {
+    @RequestMapping("admin/contact.html")
+    public String showContactList(){
 
-        return "system/life-list";
+        return "system/contact-list";
     }
+
+
+    /**
+     * 后台留言编辑列表
+     * @return
+     */
+    @RequestMapping("admin/contact/edit.html")
+    public String showContactEdit(){
+
+        return "system/contact-edit";
+    }
+
 }

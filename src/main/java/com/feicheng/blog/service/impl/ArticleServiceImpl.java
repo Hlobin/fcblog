@@ -61,6 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public PageResult<Article> selectAllArticle(Integer page, Integer limit) {
 
+
         PageHelper.startPage(page, limit);
 
         List<Article> articles = this.articleMapper.selectAll();

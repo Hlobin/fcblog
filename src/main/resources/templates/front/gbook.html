@@ -1,85 +1,346 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>留言</title>
-<meta name="keywords" content="飞飞个人博客" />
-<meta name="description" content="飞飞个人博客，是一个Java小萌新" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../../static/css/base.css" rel="stylesheet">
-<link href="../../static/css/index.css" rel="stylesheet">
-<link href="../../static/css/m.css" rel="stylesheet">
-<!--[if lt IE 9]>
-<script src="../../static/js/modernizr.js"></script>
-<![endif]-->
-<script>
-window.onload = function ()
-{
-	var oH2 = document.getElementsByTagName("h2")[0];
-	var oUl = document.getElementsByTagName("ul")[0];
-	oH2.onclick = function ()
-	{
-		var style = oUl.style;
-		style.display = style.display == "block" ? "none" : "block";
-		oH2.className = style.display == "block" ? "open" : ""
-	}
-}
-</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../../static/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../static/css/public.css" media="all">
+    <link rel="stylesheet" href="../../static/lib/layui-v2.5.4/css/modules/layer/default/layer.css" media="all">
+
+    <title>留言墙</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body {
+            background: -webkit-linear-gradient(top, rgb(203, 235, 219) 0%, rgb(55, 148, 192) 120%);
+            background: -moz-linear-gradient(top, rgb(203, 235, 219) 0%, rgb(55, 148, 192) 120%);
+            font-family: '微软雅黑', sans-serif;
+            font-size: 16px;
+            position: relative;
+            top: 0px;
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+        }
+
+        .item {
+            width: 200px;
+            height: 200px;
+            line-height: 30px;
+            -webkit-border-bottom-left-radius: 20px 500px;
+            -webkit-border-bottom-right-radius: 500px 30px;
+            -webkit-border-top-right-radius: 5px 100px;
+            -moz-border-bottom-left-radius: 20px 500px;
+            -moz-border-bottom-right-radius: 500px 30px;
+            -moz-border-top-right-radius: 5px 100px;
+            box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        #container p {
+            height: 80px;
+            margin: 30px 10px;
+            overflow: hidden;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+
+        #container a {
+            text-decoration: none;
+            color: white;
+            position: relative;
+            left: 150px;
+            coler: red;
+            font-size: 14px;
+        }
+
+        #input {
+            border: 0;
+            border-radius: 5px;
+            display: block;
+            height: 30px;
+            padding: 0 1em;
+            line-height: 30px;
+            width: 300px;
+            margin: 85px auto;
+            font-size: 20px;
+        }
+
+        #button {
+            border: 0;
+            border-radius: 5px;
+            display: block;
+            height: 30px;
+            padding: 0 1em;
+            line-height: 30px;
+            width: 300px;
+            margin: 85px auto;
+            font-size: 20px;
+        }
+    </style>
+
+
 </head>
 <body>
-<header>
-  <div class="tophead">
-    <div class="logo"><a href="/">飞飞个人博客</a></div>
-    <div id="mnav">
-      <h2><span class="navicon"></span></h2>
-      <ul>
-        <li><a href="index.html">网站首页</a></li>
-        <li><a href="about.html">关于我</a></li>
-        <li><a href="list.html">学无止境</a></li>
-        <li><a href="gbook.html">留言</a></li>
-      </ul>
-    </div>
-    <nav class="topnav" id="topnav">
-      <ul>
-        <li><a href="index.html">网站首页</a></li>
-        <li><a href="about.html">关于我</a></li>
-        <li><a href="list.html">学无止境</a></li>
-        <li><a href="gbook.html">留言</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-<article>
-  <h1 class="t_nav"><span>像“草根”一样，紧贴着地面，低调的存在，冬去春来，枯荣无恙。</span><a href="/" class="n1">网站首页</a><a href="/" class="n2">留言</a></h1>
-  <div class="ab_box">
-    <div class="leftbox">
-      <div class="newsview">
-        <div class="news_infos"> 此处安装插件 </div>
-      </div>
-    </div>
-    <div class="rightbox">
-      <div class="aboutme">
-        <h2 class="hometitle">关于我</h2>
-        <div class="avatar"> <img src="../../static/images/avatar.jpg"> </div>
-        <div class="ab_con">
-          <p>网名：WRF | 王若飞</p>
-          <p>职业：Java工程师 </p>
-          <p>个人微信：WRF1692454247</p>
-          <p>邮箱：1692454247@qq.com</p>
-        </div>
-      </div>
-      <div class="weixin">
-        <h2 class="hometitle">微信关注</h2>
-        <ul>
-          <img src="../../static/images/weixin.png">
-        </ul>
-      </div>
-    </div>
-  </div>
-</article>
-<footer>
-  <p>Design by <a href="/index.html">飞飞个人博客</a></p>
-</footer>
-<script src="../../static/js/nav.js"></script>
+<div id="container" style="height:520px;">
+</div>
+<div id="button">
+    <button type="button" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius flash" >点击刷新
+    </button>
+</div>
+<input id="input" type="text" placeholder="随便说说吧...按回车发布"/><br>
+
+<script src="../../static/js/jquery.min.js"></script>
+<script src="../../static/js/layer.js" charset="utf-8"></script>
+
+
+<script>
+
+
+    (function ($) {
+
+
+        var container;
+
+        // 可选颜色
+        var colors = ['#96C2F1', '#BBE1F1', '#E3E197', '#F8B3D0', '#FFCC00'];
+
+        //创建许愿页
+        var createItem = function (text) {
+            var color = colors[parseInt(Math.random() * 5, 10)];
+
+            $('<div class="item" id="contact"><p>' + text.contactContent + '</p><p>' + nowtime(text.contactDate) + '</p></div>').css({'background': color}).appendTo(container).drag();
+        };
+
+        // 定义拖拽函数
+        $.fn.drag = function () {
+
+            var $this = $(this);
+            var parent = $this.parent();
+
+            var pw = parent.width();
+            var ph = parent.height();
+            var thisWidth = $this.width() + parseInt($this.css('padding-left'), 10) + parseInt($this.css('padding-right'), 10);
+            var thisHeight = $this.height() + parseInt($this.css('padding-top'), 10) + parseInt($this.css('padding-bottom'), 10);
+
+            var x, y, positionX, positionY;
+            var isDown = false;
+
+            var randY = parseInt(Math.random() * (ph - thisHeight), 10);
+            var randX = parseInt(Math.random() * (pw - thisWidth), 10);
+
+
+            parent.css({
+                "position": "relative",
+                "overflow": "hidden"
+            });
+
+            $this.css({
+                "cursor": "move",
+                "position": "absolute"
+            }).css({
+                top: randY,
+                left: randX
+            }).mousedown(function (e) {
+                parent.children().css({
+                    "zIndex": "0"
+                });
+                $this.css({
+                    "zIndex": "1"
+                });
+                isDown = true;
+                x = e.pageX;
+                y = e.pageY;
+                positionX = $this.position().left;
+                positionY = $this.position().top;
+                return false;
+            });
+
+
+            $(document).mouseup(function (e) {
+                isDown = false;
+            }).mousemove(function (e) {
+                var xPage = e.pageX;
+                var moveX = positionX + xPage - x;
+
+                var yPage = e.pageY;
+                var moveY = positionY + yPage - y;
+
+                if (isDown == true) {
+                    $this.css({
+                        "left": moveX,
+                        "top": moveY
+                    });
+                } else {
+                    return;
+                }
+                if (moveX < 0) {
+                    $this.css({
+                        "left": "0"
+                    });
+                }
+                if (moveX > (pw - thisWidth)) {
+                    $this.css({
+                        "left": pw - thisWidth
+                    });
+                }
+                if (moveY < 0) {
+                    $this.css({
+                        "top": "0"
+                    });
+                }
+                if (moveY > (ph - thisHeight)) {
+                    $this.css({
+                        "top": ph - thisHeight
+                    });
+                }
+            });
+        };
+
+        // 初始化
+        var init = function () {
+
+
+            container = $('#container');
+
+            // 绑定关闭事件
+            container.on('click', 'a', function () {
+                $(this).parent().remove();
+            }).height($(window).height() - 204);
+
+            $.get("/contact/list",
+                {
+                    // 起始页
+                    page: 1,
+
+                    // 查询数量
+                    limit: 10
+                },
+
+                function (res) {
+
+                    $.each(res.data, function (i, v) {
+
+                        createItem(v);
+
+                    });
+                });
+        };
+        var list = [{contactContent: '你好', contactDate: new Date()}];
+
+        /**
+         * 添加评论
+         */
+
+        // 绑定输入框
+        $('#input').keydown(function (e) {
+            var $this = $(this);
+
+            if (e.keyCode == '13') {
+
+                var value = $this.val();
+
+                if (value) {
+
+                    $.post("/contact/add",
+                        {
+                            contactContent: value
+                        },
+
+                        function (res) {
+
+                            if (res.info == '请输入留言') {
+
+                                layer.msg("请输入留言");
+                            }
+
+                            if (res.info == '留言成功') {
+
+                                layer.msg("感谢留言");
+
+                                list[0].contactContent = value;
+
+                                createItem(list[0]);
+                            }
+
+                            if (res.info == '操作失败') {
+
+                                layer.msg("留言失败，请稍后再试");
+
+                                return;
+                            }
+
+                        });
+                    $this.val('');
+                }else {
+
+                    layer.msg("亲，请输入里的留言");
+                }
+            }
+        });
+
+        // 刷新数据
+        $(".flash").click(function () {
+
+            $.get("/contact/list",
+                {
+                    page: Math.floor(Math.random() * 5) + 1,
+
+                    limit: 10
+                },
+
+                function (res) {
+
+                    if (res.msg == '查询成功') {
+
+                        // 清空屏幕上的留言
+                        $(".item").remove();
+
+                        // 添加新的数据
+                        $.each(res.data, function (i, v) {
+
+                            createItem(v);
+
+                        });
+
+                        return;
+                    }
+
+                    if (res.msg = '查询失败') {
+
+                        layer.msg("无数据,请重新刷新");
+                    }
+                });
+        });
+
+        $(function () {
+            init();
+        });
+
+    })(jQuery);
+
+
+    function nowtime(date) {//将当前时间转换成yyyymmdd格式
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear();
+        var mm = mydate.getMonth() + 1
+        if (mydate.getMonth() > 9) {
+            str += mm;
+        } else {
+            str += "0" + mm;
+        }
+        if (mydate.getDate() > 9) {
+            str += mydate.getDate();
+        } else {
+            str += "0" + mydate.getDate();
+        }
+        return str;
+    }
+
+</script>
+
 </body>
 </html>
