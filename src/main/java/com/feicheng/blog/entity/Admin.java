@@ -1,5 +1,11 @@
 package com.feicheng.blog.entity;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -8,8 +14,12 @@ import java.util.List;
  * 管理员基本类
  * @author DrameCode
  */
+@Table(name = "admin")
 public class Admin implements Serializable {
 
+    @Id
+    @KeySql(useGeneratedKeys = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String adminName;
@@ -26,18 +36,6 @@ public class Admin implements Serializable {
 
     private Integer adminDelete;
 
-    private Integer adminExpendId;
-
-    // 动态验证码
-    private Integer code;
-
-    // 非数据库字段
-
-    // 管理员扩展表
-    private AdminExpend adminExpend;
-
-    // 管理员对应的技术领域
-    private List<Techlogy> techlogies;
 
     public Integer getId() {
         return id;
@@ -103,55 +101,6 @@ public class Admin implements Serializable {
         this.adminDelete = adminDelete;
     }
 
-    public Integer getAdminExpendId() {
-        return adminExpendId;
-    }
 
-    public void setAdminExpendId(Integer adminExpendId) {
-        this.adminExpendId = adminExpendId;
-    }
-
-    public AdminExpend getAdminExpend() {
-        return adminExpend;
-    }
-
-    public void setAdminExpend(AdminExpend adminExpend) {
-        this.adminExpend = adminExpend;
-    }
-
-    public List<Techlogy> getTechlogies() {
-        return techlogies;
-    }
-
-    public void setTechlogies(List<Techlogy> techlogies) {
-
-        this.techlogies = techlogies;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    @Override
-    public String toString() {
-        return "Admin{" +
-                "id=" + id +
-                ", adminName='" + adminName + '\'' +
-                ", adminPassword='" + adminPassword + '\'' +
-                ", adminPhone='" + adminPhone + '\'' +
-                ", adminEmail='" + adminEmail + '\'' +
-                ", adminDate=" + adminDate +
-                ", adminStatus=" + adminStatus +
-                ", adminDelete=" + adminDelete +
-                ", adminExpendId=" + adminExpendId +
-                ", code=" + code +
-                ", adminExpend=" + adminExpend +
-                ", techlogies=" + techlogies +
-                '}';
-    }
 }
 

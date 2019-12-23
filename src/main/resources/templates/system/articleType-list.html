@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <title>文章分类列表</title>
@@ -14,16 +14,19 @@
     <div class="layuimini-main">
 
         <div class="layui-btn-group">
-            <button class="layui-btn data-add-btn" id="addArticleType">添加</button>
-            <button class="layui-btn layui-btn-danger data-delete-btn">删除</button>
+            <button class="layui-btn data-add-btn" id="addArticleType" shiro:hasPermission="articleType:add">添加</button>
+            <button class="layui-btn layui-btn-danger data-delete-btn" shiro:hasPermission="articleType:delete">删除</button>
         </div>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
 
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+            <span shiro:lacksPermission="articleType:edit,articleType:delete">
+                <span class="layui-badge-dot febs-bg-orange"></span> 无权限
+            </span>
+            <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit" shiro:hasPermission="articleType:edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete" shiro:hasPermission="articleType:delete">删除</a>
         </script>
     </div>
 </div>

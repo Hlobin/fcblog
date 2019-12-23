@@ -1,19 +1,23 @@
 package com.feicheng.blog.entity;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author DrameCode
+ * 用户基本类
+ * @author Lenovo
  */
 @Table(name = "user")
-public class User implements Serializable {
+public class User {
+
 
     @Id
+    @KeySql(useGeneratedKeys = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -29,11 +33,11 @@ public class User implements Serializable {
 
     private String userSign;
 
-    private String userClassify;
-
     private String userPhone;
 
     private String userEmail;
+
+    private String userClassify;
 
     private Date userDate;
 
@@ -41,20 +45,6 @@ public class User implements Serializable {
 
     private Integer authorityId;
 
-
-    // 非数据库字段
-    private Authority authority;
-
-    public Authority getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
-    }
-
-
-    // 数据库字段的setter和getter方法
     public Integer getId() {
         return id;
     }
@@ -69,6 +59,22 @@ public class User implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
     }
 
     public String getUserSex() {
@@ -95,38 +101,6 @@ public class User implements Serializable {
         this.userSign = userSign;
     }
 
-    public Integer getUserDelete() {
-        return userDelete;
-    }
-
-    public void setUserDelete(Integer userDelete) {
-        this.userDelete = userDelete;
-    }
-
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
-    }
-
-    public Integer getAuthorityId() {
-        return authorityId;
-    }
-
-    public void setAuthorityId(Integer authorityId) {
-        this.authorityId = authorityId;
-    }
-
-    public String getUserClassify() {
-        return userClassify;
-    }
-
-    public void setUserClassify(String userClassify) {
-        this.userClassify = userClassify;
-    }
-
     public String getUserPhone() {
         return userPhone;
     }
@@ -143,6 +117,14 @@ public class User implements Serializable {
         this.userEmail = userEmail;
     }
 
+    public String getUserClassify() {
+        return userClassify;
+    }
+
+    public void setUserClassify(String userClassify) {
+        this.userClassify = userClassify;
+    }
+
     public Date getUserDate() {
         return userDate;
     }
@@ -151,11 +133,19 @@ public class User implements Serializable {
         this.userDate = userDate;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public Integer getUserDelete() {
+        return userDelete;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setUserDelete(Integer userDelete) {
+        this.userDelete = userDelete;
+    }
+
+    public Integer getAuthorityId() {
+        return authorityId;
+    }
+
+    public void setAuthorityId(Integer authorityId) {
+        this.authorityId = authorityId;
     }
 }

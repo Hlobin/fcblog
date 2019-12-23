@@ -8,7 +8,7 @@
     "href": "/admin/welcome.html"
   },
   "logoInfo": {
-    "title": "LayuiMini",
+    "title": "飞飞博客后台",
     "image": "../images/logo.png",
     "href": ""
   },
@@ -18,10 +18,30 @@
       "icon": "fa fa-address-book",
       "child": [
         {
-          "title": "系统设置",
-          "href": "page/setting.html",
+          "title": "系统管理",
+          "href": "",
           "icon": "fa fa-gears",
-          "target": "_self"
+          "target": "_self",
+          "child": [
+            {
+              "title": "系统设置",
+              "href": "/admin/setting.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "菜单管理",
+              "href": "/admin/menu.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "角色管理",
+              "href": "/admin/role.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
         },
         {
           "title": "首页管理",

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <title>评论列表</title>
@@ -47,13 +47,16 @@
         </fieldset>
 
         <div class="layui-btn-group">
-            <button class="layui-btn layui-btn-danger data-delete-btn" id="delete_some">删除</button>
+            <button class="layui-btn layui-btn-danger data-delete-btn" id="delete_some" shiro:hasPermission="comment:delete">删除</button>
         </div>
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+            <span shiro:lacksPermission="comment:edit,comment:delete">
+                <span class="layui-badge-dot febs-bg-orange"></span> 无权限
+            </span>
+            <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit" shiro:hasPermission="comment:edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete" shiro:hasPermission="comment:delete">删除</a>
         </script>
     </div>
 </div>

@@ -105,7 +105,7 @@
         scrollbar: !0,
         tips: 2
     }, s.pt.vessel = function (e, t) {
-        var n = this, a = n.index, r = n.config, s = r.zIndex + a, f = "object" == typeof r.title,
+        var n = this, a = n.login, r = n.config, s = r.zIndex + a, f = "object" == typeof r.title,
             c = r.maxmin && (1 === r.type || 2 === r.type),
             u = r.title ? '<div class="layui-layer-title" style="' + (f ? r.title[1] : "") + '">' + (f ? r.title[0] : r.title) + "</div>" : "";
         return r.zIndex = s, t([r.shade ? '<div class="layui-layer-shade" id="layui-layer-shade' + a + '" times="' + a + '" style="' + ("z-index:" + (s - 1) + "; ") + '"></div>' : "", '<div class="' + l[0] + (" layui-layer-" + o.type[r.type]) + (0 != r.type && 2 != r.type || r.shade ? "" : " layui-layer-border") + " " + (r.skin || "") + '" id="' + l[0] + a + '" type="' + o.type[r.type] + '" times="' + a + '" showtime="' + r.time + '" conType="' + (e ? "object" : "string") + '" style="z-index: ' + s + "; width:" + r.area[0] + ";height:" + r.area[1] + (r.fixed ? "" : ";position:absolute;") + '">' + (e && 2 != r.type ? "" : u) + '<div id="' + (r.id || "") + '" class="layui-layer-content' + (0 == r.type && r.icon !== -1 ? " layui-layer-padding" : "") + (3 == r.type ? " layui-layer-loading" + r.icon : "") + '">' + (0 == r.type && r.icon !== -1 ? '<i class="layui-layer-ico layui-layer-ico' + r.icon + '"></i>' : "") + (1 == r.type && e ? "" : r.content || "") + '</div><span class="layui-layer-setwin">' + function () {
@@ -118,7 +118,7 @@
             return '<div class="' + l[6] + " layui-layer-btn-" + (r.btnAlign || "") + '">' + e + "</div>"
         }() : "") + (r.resize ? '<span class="layui-layer-resize"></span>' : "") + "</div>"], u, i('<div class="layui-layer-move"></div>')), n
     }, s.pt.creat = function () {
-        var e = this, t = e.config, a = e.index, s = t.content, f = "object" == typeof s, c = i("body");
+        var e = this, t = e.config, a = e.login, s = t.content, f = "object" == typeof s, c = i("body");
         if (!t.id || !i("#" + t.id)[0]) {
             switch ("string" == typeof t.area && (t.area = "auto" === t.area ? ["", ""] : [t.area, ""]), t.shift && (t.anim = t.shift), 6 == r.ie && (t.fixed = !1), t.type) {
                 case 0:
@@ -142,13 +142,13 @@
                         s.parents("." + l[0])[0] || (s.data("display", s.css("display")).show().addClass("layui-layer-wrap").wrap(n[1]), i("#" + l[0] + a).find("." + l[5]).before(r))
                     }()
                 }() : c.append(n[1]), i(".layui-layer-move")[0] || c.append(o.moveElem = u), e.layero = i("#" + l[0] + a), t.scrollbar || l.html.css("overflow", "hidden").attr("layer-full", a)
-            }).auto(a), i("#layui-layer-shade" + e.index).css({
+            }).auto(a), i("#layui-layer-shade" + e.login).css({
                 "background-color": t.shade[1] || "#000",
                 opacity: t.shade[0] || t.shade
             }), 2 == t.type && 6 == r.ie && e.layero.find("iframe").attr("src", s[0]), 4 == t.type ? e.tips() : e.offset(), t.fixed && n.on("resize", function () {
                 e.offset(), (/^\d+%$/.test(t.area[0]) || /^\d+%$/.test(t.area[1])) && e.auto(a), 4 == t.type && e.tips()
             }), t.time <= 0 || setTimeout(function () {
-                r.close(e.index)
+                r.close(e.login)
             }, t.time), e.move().callback(), l.anim[t.anim]) {
                 var u = "layer-anim " + l.anim[t.anim];
                 e.layero.addClass(u).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
@@ -219,7 +219,7 @@
             }
             if (t.resize && c.resizeStart) {
                 var a = i.clientX - c.offset[0], o = i.clientY - c.offset[1];
-                i.preventDefault(), r.style(e.index, {
+                i.preventDefault(), r.style(e.login, {
                     width: c.area[0] + a,
                     height: c.area[1] + o
                 }), c.isResize = !0, t.resizing && t.resizing(s)
@@ -229,29 +229,29 @@
         }), e
     }, s.pt.callback = function () {
         function e() {
-            var e = a.cancel && a.cancel(t.index, n);
-            e === !1 || r.close(t.index)
+            var e = a.cancel && a.cancel(t.login, n);
+            e === !1 || r.close(t.login)
         }
 
         var t = this, n = t.layero, a = t.config;
         t.openLayer(), a.success && (2 == a.type ? n.find("iframe").on("load", function () {
-            a.success(n, t.index)
-        }) : a.success(n, t.index)), 6 == r.ie && t.IE6(n), n.find("." + l[6]).children("a").on("click", function () {
-            var e = i(this).index();
-            if (0 === e) a.yes ? a.yes(t.index, n) : a.btn1 ? a.btn1(t.index, n) : r.close(t.index); else {
-                var o = a["btn" + (e + 1)] && a["btn" + (e + 1)](t.index, n);
-                o === !1 || r.close(t.index)
+            a.success(n, t.login)
+        }) : a.success(n, t.login)), 6 == r.ie && t.IE6(n), n.find("." + l[6]).children("a").on("click", function () {
+            var e = i(this).login();
+            if (0 === e) a.yes ? a.yes(t.login, n) : a.btn1 ? a.btn1(t.login, n) : r.close(t.login); else {
+                var o = a["btn" + (e + 1)] && a["btn" + (e + 1)](t.login, n);
+                o === !1 || r.close(t.login)
             }
-        }), n.find("." + l[7]).on("click", e), a.shadeClose && i("#layui-layer-shade" + t.index).on("click", function () {
-            r.close(t.index)
+        }), n.find("." + l[7]).on("click", e), a.shadeClose && i("#layui-layer-shade" + t.login).on("click", function () {
+            r.close(t.login)
         }), n.find(".layui-layer-min").on("click", function () {
             var e = a.min && a.min(n);
-            e === !1 || r.min(t.index, a)
+            e === !1 || r.min(t.login, a)
         }), n.find(".layui-layer-max").on("click", function () {
-            i(this).hasClass("layui-layer-maxmin") ? (r.restore(t.index), a.restore && a.restore(n)) : (r.full(t.index, a), setTimeout(function () {
+            i(this).hasClass("layui-layer-maxmin") ? (r.restore(t.login), a.restore && a.restore(n)) : (r.full(t.login, a), setTimeout(function () {
                 a.full && a.full(n)
             }, 100))
-        }), a.end && (o.end[t.index] = a.end)
+        }), a.end && (o.end[t.login] = a.end)
     }, o.reselect = function () {
         i.each(i("select"), function (e, t) {
             var n = i(this);
@@ -404,7 +404,7 @@
                 var o = t.find(".layui-layer-title").children(), r = t.find(".layui-layer-tabmain").children();
                 o.on("mousedown", function (t) {
                     t.stopPropagation ? t.stopPropagation() : t.cancelBubble = !0;
-                    var a = i(this), o = a.index();
+                    var a = i(this), o = a.login();
                     a.addClass(n).siblings().removeClass(n), r.eq(o).show().siblings().hide(), "function" == typeof e.change && e.change(o)
                 }), "function" == typeof a && a(t)
             }

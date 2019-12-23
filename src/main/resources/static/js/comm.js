@@ -107,7 +107,7 @@ $(document).ready(function () {
 			for(var n = 0; n < oLi.length; n++) oLi[n].className="";
 			this.className = "current";
 			for(var n = 0; n < oUls.length; n++) oUls[n].style.display = "none";
-			oUls[this.index].style.display = "block"
+			oUls[this.login].style.display = "block"
 		}	
 	};
 		

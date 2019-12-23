@@ -5,6 +5,7 @@ import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.FrontPicture;
 import com.feicheng.blog.service.FrontPictureService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,7 @@ public class FrontPictureController {
      * @return
      */
     @GetMapping("list")
+    @RequiresPermissions("picture:view")
     public ResponseEntity<PageResult<FrontPicture>> selectPictureByPage(@RequestParam("page") Integer page,
                                                                         @RequestParam("limit") Integer limit,
                                                                         @RequestParam(value = "pictureTitle", required = false) String pictureTitle) {
@@ -58,6 +60,7 @@ public class FrontPictureController {
      * @return
      */
     @PostMapping("add")
+    @RequiresPermissions("picture:add")
     public ResponseEntity<ResponseResult> addPicture(FrontPicture frontPicture) {
 
         Map<String, Object> map = this.frontPictureService.addPicture(frontPicture);
@@ -76,6 +79,7 @@ public class FrontPictureController {
      * @return
      */
     @PostMapping("edit")
+    @RequiresPermissions("picture:edit")
     public ResponseEntity<ResponseResult> editPicture(FrontPicture frontPicture){
 
         Map<String, Object> map = this.frontPictureService.editPicture(frontPicture);

@@ -5,6 +5,7 @@ import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.*;
 import com.feicheng.blog.service.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -83,6 +84,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("list")
+    @RequiresPermissions("article:view")
     public ResponseEntity<PageResult<Article>> selectAllArticle(@RequestParam("page") Integer page,
                                                                 @RequestParam("limit") Integer limit) {
 
@@ -104,6 +106,7 @@ public class ArticleController {
      * @return
      */
     @PostMapping("edit")
+    @RequiresPermissions("article:edit")
     public ResponseEntity<ResponseResult> editArticle(Article article) {
 
         // 修改文章
@@ -120,6 +123,7 @@ public class ArticleController {
      * @return
      */
     @PostMapping("add")
+    @RequiresPermissions("article:add")
     public ResponseEntity<ResponseResult> addArticle(Article article) {
 
         // 添加文章
@@ -213,6 +217,7 @@ public class ArticleController {
      * @return
      */
     @PostMapping("delete")
+    @RequiresPermissions("article:delete")
     public ResponseEntity<ResponseResult> deleteArticle(@RequestParam("articleId") Integer id) {
 
         Map<String, Object> map = this.articleService.deleteArticle(id);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <title>首页图片</title>
@@ -23,10 +23,10 @@
                 <a class="layui-btn search_btn" data-type="reload">搜索</a>
             </div>
             <div class="layui-inline">
-                <a class="layui-btn layui-btn-normal addNews_btn">添加首页图片</a>
+                <a class="layui-btn layui-btn-normal addNews_btn" shiro:hasPermission="picture:add">添加首页图片</a>
             </div>
             <div class="layui-inline">
-                <a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn">批量删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn" shiro:hasPermission="picture:delete">批量删除</a>
             </div>
         </form>
     </blockquote>
@@ -42,9 +42,12 @@
         {{#  }}}
     </script>
     <script type="text/html" id="newsListBar">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
-        <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="look">预览</a>
+        <span shiro:lacksPermission="picture:edit,picture:delete">
+                <span class="layui-badge-dot febs-bg-orange"></span> 无权限
+            </span>
+        <a class="layui-btn layui-btn-xs" lay-event="edit" shiro:hasPermission="picture:edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" shiro:hasPermission="picture:delete">删除</a>
+        <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="look" shiro:hasPermission="picture:look">预览</a>
     </script>
 </form>
 <script src="../../static/lib/layui-v2.5.4/layui.js" charset="utf-8"></script>

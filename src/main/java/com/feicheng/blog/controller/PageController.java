@@ -4,6 +4,7 @@ import com.feicheng.blog.common.PageResult;
 import com.feicheng.blog.entity.*;
 import com.feicheng.blog.service.*;
 import net.bytebuddy.asm.Advice;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -326,6 +327,7 @@ public class PageController {
      * @return
      */
     @RequestMapping("admin/user/list.html")
+    @RequiresPermissions("system:view")
     public String showUserList() {
 
         return "system/user-list";
@@ -349,6 +351,7 @@ public class PageController {
      * @return
      */
     @RequestMapping("admin/picture.html")
+    @RequiresPermissions("picture:view")
     public String showFrontPicture() {
 
         return "system/front-picture";
@@ -401,6 +404,7 @@ public class PageController {
      * @return
      */
     @RequestMapping("admin/articleType/list.html")
+    @RequiresPermissions("articleType:view")
     public String showArticleTypeList() {
 
         return "system/articleType-list";
@@ -462,10 +466,12 @@ public class PageController {
 
     /**
      * 后台留言列表
+     *
      * @return
      */
     @RequestMapping("admin/contact.html")
-    public String showContactList(){
+    @RequiresPermissions("contact:view")
+    public String showContactList() {
 
         return "system/contact-list";
     }
@@ -473,12 +479,107 @@ public class PageController {
 
     /**
      * 后台留言编辑列表
+     *
      * @return
      */
     @RequestMapping("admin/contact/edit.html")
-    public String showContactEdit(){
+    public String showContactEdit() {
 
         return "system/contact-edit";
     }
 
+    /**
+     * 系统设置界面
+     *
+     * @return
+     */
+    @RequestMapping("admin/setting.html")
+    @RequiresPermissions("system:view")
+    public String showSetting() {
+
+        return "system/setting";
+    }
+
+    // 菜单管理
+
+    /**
+     * 菜单管理
+     *
+     * @return
+     */
+    @RequestMapping("admin/menu.html")
+    @RequiresPermissions("menu:view")
+    public String showMenu() {
+
+        return "system/menu/menu-list";
+    }
+
+
+    /**
+     * 菜单添加界面
+     *
+     * @return
+     */
+    @RequestMapping("admin/menu/add.html")
+    public String showAddMenu() {
+
+        return "system/menu/menu-add";
+    }
+
+    // 角色管理
+
+
+    /**
+     * 角色界面
+     *
+     * @return
+     */
+    @RequestMapping("admin/role.html")
+    @RequiresPermissions("role:view")
+    public String showRole() {
+
+        return "system/role/role-list";
+    }
+
+    /**
+     * 编辑角色界面
+     *
+     * @return
+     */
+    @RequestMapping("admin/role/edit.html")
+    public String showRoleEdit() {
+
+        return "system/role/role-edit";
+    }
+
+
+    /**
+     * 添加角色界面
+     *
+     * @return
+     */
+    @RequestMapping("admin/role/add.html")
+    public String showRoleAdd() {
+
+        return "system/role/role-add";
+    }
+
+
+    // 登录界面
+    @RequestMapping("admin/login.html")
+    public String showLogin() {
+
+        return "system/login/login";
+    }
+
+
+    /**
+     * 注册界面
+     * @return
+     */
+    @RequestMapping("admin/register.html")
+    public String showRegister() {
+
+        return "system/register/register";
+    }
 }

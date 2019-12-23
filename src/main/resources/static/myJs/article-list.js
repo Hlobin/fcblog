@@ -57,7 +57,7 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
                     }
                 },
 
-                {title: '操作', width: 170, templet: '#newsListBar', fixed: "right", align: "center"}
+                {title: '操作', width: 300, templet: '#newsListBar', fixed: "right", align: "center"}
             ]
         ]
     });

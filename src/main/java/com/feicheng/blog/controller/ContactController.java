@@ -7,6 +7,7 @@ import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.Contact;
 import com.feicheng.blog.service.ContactService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ public class ContactController {
      * @return
      */
     @GetMapping("list")
+    @RequiresPermissions("contact:view")
     public ResponseEntity<PageResult<Contact>> select(@RequestParam("page") Integer page,
                                                       @RequestParam("limit") Integer limit,
                                                       @RequestParam(value = "contactContent", required = false) String contactContent){
@@ -52,6 +54,7 @@ public class ContactController {
      * @return
      */
     @PostMapping("edit")
+    @RequiresPermissions("contact:edit")
     public ResponseEntity<ResponseResult> edit(Contact contact){
 
         Map<String, Object> map = this.contactService.editContact(contact);
@@ -71,6 +74,7 @@ public class ContactController {
      * @return
      */
     @PostMapping("delete")
+    @RequiresPermissions("contact:delete")
     public ResponseEntity<ResponseResult> delete(@RequestParam("contactId") Integer contactId){
 
         Map<String, Object> map = this.contactService.deleteContact(contactId);
@@ -90,6 +94,7 @@ public class ContactController {
      * @return
      */
     @PostMapping("add")
+    @RequiresPermissions("contact:add")
     public ResponseEntity<ResponseResult> add(@RequestParam("contactContent") String contactContent){
 
         Map<String, Object> map = this.contactService.addContact(contactContent);

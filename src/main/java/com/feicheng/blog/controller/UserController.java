@@ -3,6 +3,7 @@ package com.feicheng.blog.controller;
 import com.feicheng.blog.common.PageResult;
 import com.feicheng.blog.entity.User;
 import com.feicheng.blog.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ public class UserController {
      * @return
      */
     @GetMapping("list")
+    @RequiresPermissions("user:view")
     public ResponseEntity<PageResult<User>> selectUserByPage(@RequestParam("page") Integer page,
                                                              @RequestParam("limit") Integer limit,
                                                              @RequestParam(name = "userName", required = false) String userName,

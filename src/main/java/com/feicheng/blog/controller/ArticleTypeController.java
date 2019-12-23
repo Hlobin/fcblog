@@ -5,6 +5,7 @@ import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.ArticleType;
 import com.feicheng.blog.service.ArticleTypeService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,7 @@ public class ArticleTypeController {
      * @return
      */
     @GetMapping("list")
+    @RequiresPermissions("articleType:view")
     public ResponseEntity<PageResult<ArticleType>> selectAllArticleType(@RequestParam("page") Integer page,
                                                                         @RequestParam("limit") Integer limit) {
 
@@ -55,6 +57,7 @@ public class ArticleTypeController {
      * @return
      */
     @PostMapping("edit")
+    @RequiresPermissions("articleType:edit")
     public ResponseEntity<ResponseResult> editArticleType(ArticleType articleType) {
 
         Map<String, Object> map = this.articleTypeService.editArticleType(articleType);
@@ -74,6 +77,7 @@ public class ArticleTypeController {
      * @return
      */
     @PostMapping("delete")
+    @RequiresPermissions("articleType:delete")
     public ResponseEntity<ResponseResult> deleteArticleType(@RequestParam("articleTypeId") Integer articleTypeId){
 
         Map<String, Object> map = this.articleTypeService.deleteArticleType(articleTypeId);
@@ -93,6 +97,7 @@ public class ArticleTypeController {
      * @return
      */
     @PostMapping("add")
+    @RequiresPermissions("articleType:add")
     public ResponseEntity<ResponseResult> addArticleType(@RequestParam("articleTypeName") String articleTypeName){
 
         Map<String, Object> map = this.articleTypeService.addArticleType(articleTypeName);

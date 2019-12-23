@@ -6,6 +6,7 @@ import com.feicheng.blog.entity.Comment;
 import com.feicheng.blog.pojo.CommentExpend;
 import com.feicheng.blog.service.CommentService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,7 @@ public class CommentController {
      * @return
      */
     @PostMapping("add")
+    @RequiresPermissions("comment:add")
     public ResponseEntity<ResponseResult> addComment(Comment comment) {
 
         Map<String, Object> map = this.commentService.addComment(comment);
@@ -57,6 +59,7 @@ public class CommentController {
      * @return
      */
     @GetMapping("list")
+    @RequiresPermissions("comment:view")
     public ResponseEntity<PageResult<CommentExpend>> selectCommentByPage(@RequestParam("page") Integer page,
                                                                          @RequestParam("limit") Integer limit,
                                                                          @RequestParam(name = "commentUserName", required = false) String commentUserName,
@@ -80,6 +83,7 @@ public class CommentController {
      * @return
      */
     @PostMapping("edit")
+    @RequiresPermissions("comment:edit")
     public ResponseEntity<ResponseResult> editComment(Comment comment) {
 
         Map<String, Object> map = this.commentService.editComment(comment);
@@ -100,6 +104,7 @@ public class CommentController {
      * @return
      */
     @PostMapping("delete")
+    @RequiresPermissions("comment:delete")
     public ResponseEntity<ResponseResult> deleteComment(@RequestParam("commentId") Integer commentId) {
 
         Map<String, Object> map = this.commentService.deleteComment(commentId);
