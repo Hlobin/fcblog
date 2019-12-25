@@ -136,6 +136,8 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/gbook.html", "anon");
 
+        filterChainDefinitionMap.put("/editor.html", "anon");
+
         filterChainDefinitionMap.put("/article/detail/**", "anon");
 
         filterChainDefinitionMap.put("/article/type/**", "anon");
@@ -157,6 +159,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/lib/**", "anon");
 
         filterChainDefinitionMap.put("/myJs/**", "anon");
+
+        filterChainDefinitionMap.put("/Content/**", "anon");
 
 
         // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>layui 集成 editormd 富文本编辑器</title>
+    <link rel="stylesheet" href="../../static/lib/layui-v2.5.4/css/layui.css">
+    <link rel="stylesheet" href="../../static/laymd/laymd.css">
+    <link rel="stylesheet" href="../../static/laymd/preview.css">
+</head>
+<body>
+<div class="laymd-dome"></div>
+<script src="../../static/laymd/marked.min.js"></script>
+
+<script src="../../static/js/jquery.min.js"></script>
+<script src="../../static/lib/layui-v2.5.4/layui.js"></script>
+
+
+<script type="text/javascript">
+    layui.use(['layer', 'jquery'], function(){
+        var layer = layui.layer
+            , $= layui.jquery;
+
+        layui.config({base: 'laymd/'}).use(['laymd'], function(){
+            var laymd = layui.laymd;
+
+            //实例化编辑器,可以多个实例
+            //改用css选择器,去除init冗余
+            var md = laymd('.laymd-dome', {});
+
+            //内容改变事件
+            md.on('change', function () {
+                //这里借用marked.js解析效率比HyperDown快,用户可自行找解析器
+                this.setPreview(marked(this.getText()));
+            });
+
+            //初始化数据预览
+            md.do('change');
+        });
+    });
+</script>
+</body>
+</html>

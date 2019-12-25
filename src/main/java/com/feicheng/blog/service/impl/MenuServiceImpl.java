@@ -206,9 +206,30 @@ public class MenuServiceImpl implements MenuService {
 
                 if (count > 0) {
 
-                    map.put("message", "success");
+                    // 删除角色中的菜单权限
+                    // 创建模板
+                    Example roleMenuExample = new Example(RoleMenu.class);
 
-                    map.put("result", "删除成功");
+                    Example.Criteria roleMenuCriteria = roleMenuExample.createCriteria();
+
+                    // 设置删除条件
+                    roleMenuCriteria.andEqualTo("menuId", authorityId);
+
+                    // 执行删除
+                    count = this.roleMenuMapper.deleteByExample(roleMenuExample);
+
+                    if (count >= 0) {
+
+                        map.put("message", "success");
+
+                        map.put("result", "删除成功");
+
+                        return map;
+                    }
+
+                    map.put("message", "error");
+
+                    map.put("result", "删除失败");
 
                     return map;
                 }
@@ -231,11 +252,42 @@ public class MenuServiceImpl implements MenuService {
 
                 if (count > 0) {
 
-                    map.put("message", "success");
 
-                    map.put("result", "删除成功");
 
-                    return map;
+                    for (Menu menu : menus
+                    ) {
+
+                        // 循环删除角色中的菜单权限
+                        // 创建模板
+                        Example roleMenuExample = new Example(RoleMenu.class);
+
+                        Example.Criteria roleMenuCriteria = roleMenuExample.createCriteria();
+
+                        // 设置删除条件
+                        roleMenuCriteria.andEqualTo("menuId", menu.getAuthorityId());
+
+                        // 执行删除
+                        count = this.roleMenuMapper.deleteByExample(roleMenuExample);
+                    }
+
+                    // 循环删除角色中的菜单权限
+                    // 创建模板
+                    Example roleMenuExample = new Example(RoleMenu.class);
+
+                    Example.Criteria roleMenuCriteria = roleMenuExample.createCriteria();
+
+                    roleMenuCriteria.andEqualTo("menuId", authorityId);
+
+                    count = this.roleMenuMapper.deleteByExample(roleMenuExample);
+
+                    if (count >= 0) {
+
+                        map.put("message", "success");
+
+                        map.put("result", "删除成功");
+
+                        return map;
+                    }
                 }
 
                 map.put("message", "error");
@@ -261,9 +313,29 @@ public class MenuServiceImpl implements MenuService {
 
             if (count > 0) {
 
-                map.put("message", "success");
+                // 删除角色菜单中的菜单权限
+                // 创建模板
+                Example roleMenuExample = new Example(RoleMenu.class);
 
-                map.put("result", "删除成功");
+                Example.Criteria roleMenuCriteria = roleMenuExample.createCriteria();
+
+                // 设置删除条件
+                roleMenuCriteria.andEqualTo("menuId", authorityId);
+
+                // 执行删除
+                count = this.roleMenuMapper.deleteByExample(roleMenuExample);
+
+                if (count >= 0) {
+
+                    map.put("message", "success");
+
+                    map.put("result", "删除成功");
+
+                    return map;
+                }
+                map.put("message", "error");
+
+                map.put("result", "删除失败");
 
                 return map;
 
@@ -361,8 +433,8 @@ public class MenuServiceImpl implements MenuService {
             List<RoleMenu> roleMenus = this.roleMenuMapper.selectByExample(adminRoleExample);
 
             // 循环遍历该角色下的所有菜单权限
-            for (RoleMenu roleMenu: roleMenus
-                 ) {
+            for (RoleMenu roleMenu : roleMenus
+            ) {
 
                 // 执行查询
                 Menu menu = this.menuMapper.selectByPrimaryKey(roleMenu.getMenuId());

@@ -110,7 +110,7 @@
           "target": "_self",
           "child": [
             {
-              "title": "文章列表",
+              "title": "文章管理",
               "href": "/admin/article/list.html",
               "icon": "",
               "target": "_self"

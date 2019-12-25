@@ -582,4 +582,18 @@ public class PageController {
 
         return "system/register/register";
     }
+
+
+    /**
+     * 文本编辑器测试
+     */
+
+    @RequestMapping("editor.html")
+    public String testEditor(){
+
+        return "system/editor";
+    }
+
+
+
 }
