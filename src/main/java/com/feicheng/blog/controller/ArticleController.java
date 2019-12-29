@@ -4,6 +4,7 @@ import com.feicheng.blog.common.PageResult;
 import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.*;
 import com.feicheng.blog.service.*;
+import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("article")
+@Api(value = "文章接口", tags = {"文章接口"})
 public class ArticleController {
 
     // 查询首页图片文章的起始位置
@@ -85,6 +87,11 @@ public class ArticleController {
      */
     @GetMapping("list")
     @RequiresPermissions("article:view")
+    @ApiOperation(value = "查询所有文章", notes = "通过分页实现")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "查询文章的起始页", required = true, dataType = "int", example = "1", paramType = "query"),
+            @ApiImplicitParam(name = "limit", value = "查询文章的数量", required = true, dataType = "int", example = "10", paramType = "query  ")
+    })
     public ResponseEntity<PageResult<Article>> selectAllArticle(@RequestParam("page") Integer page,
                                                                 @RequestParam("limit") Integer limit) {
 
@@ -107,6 +114,8 @@ public class ArticleController {
      */
     @PostMapping("edit")
     @RequiresPermissions("article:edit")
+    @ApiOperation(value = "修改文章", notes = "根据id修改文章")
+    @ApiImplicitParam(name = "article", value = "根据id修改文章")
     public ResponseEntity<ResponseResult> editArticle(Article article) {
 
         // 修改文章
@@ -124,6 +133,7 @@ public class ArticleController {
      */
     @PostMapping("add")
     @RequiresPermissions("article:add")
+    @ApiOperation(value = "添加文章", notes = "添加新的文章")
     public ResponseEntity<ResponseResult> addArticle(Article article) {
 
         // 添加文章
@@ -140,6 +150,8 @@ public class ArticleController {
      * @return
      */
     @GetMapping("detail/{id}")
+    @ApiOperation(value = "查询文章", notes = "根据id查询文章")
+    @ApiImplicitParam(paramType = "path", dataType = "Integer", name = "id", value = "文章id", required = true)
     public String selectArticleById(@PathVariable("id") Integer id, Model model) {
 
         // 根据id查询文章信息
@@ -213,20 +225,19 @@ public class ArticleController {
 
     /**
      * 根据id删除文章
+     *
      * @param id
      * @return
      */
     @PostMapping("delete")
     @RequiresPermissions("article:delete")
+    @ApiOperation(value = "删除文章", notes = "根据id删除文章")
+    @ApiImplicitParam(paramType = "query", dataType = "int", name = "articleId", value = "文章id", required = true)
     public ResponseEntity<ResponseResult> deleteArticle(@RequestParam("articleId") Integer id) {
 
-        Map<String, Object> map = this.articleService.deleteArticle(id);
+        ResponseResult responseResult = this.articleService.deleteArticle(id);
 
-        if (StringUtils.equals(map.get("message").toString(), "error")) {
-
-            return ResponseEntity.ok(new ResponseResult(400, map.get("result").toString()));
-        }
-        return ResponseEntity.ok(new ResponseResult(200, map.get("result").toString()));
+        return ResponseEntity.ok(responseResult);
     }
 
     /**

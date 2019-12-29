@@ -1,6 +1,7 @@
 package com.feicheng.blog.service;
 
 import com.feicheng.blog.common.PageResult;
+import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.Article;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public interface ArticleService {
     PageResult<Article> selectArticleByDate(Integer page, Integer limit);
 
     // 根据id删除文章
-    Map<String, Object> deleteArticle(Integer id);
+    ResponseResult deleteArticle(Integer id);
 
     // 将文章发送到网站用户的邮箱
     void sendArticleToEmail(Integer id);

@@ -46,6 +46,9 @@ public class FrontPicture {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date pictureDate;
 
+    // 关联文章id
+    private Integer articleId;
+
     public Long getId() {
         return id;
     }
@@ -116,5 +119,13 @@ public class FrontPicture {
 
     public void setPictureDate(Date pictureDate) {
         this.pictureDate = pictureDate;
+    }
+
+    public Integer getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
     }
 }

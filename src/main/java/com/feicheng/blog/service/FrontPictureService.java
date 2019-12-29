@@ -1,6 +1,7 @@
 package com.feicheng.blog.service;
 
 import com.feicheng.blog.common.PageResult;
+import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.FrontPicture;
 
 import java.util.Map;
@@ -27,4 +28,7 @@ public interface FrontPictureService {
 
     // 更新redis中的数据
     void updateRedisData();
+
+    // 删除首页图片
+    ResponseResult deletePicture(Integer id);
 }

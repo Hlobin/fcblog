@@ -21,3 +21,20 @@ logging:
     com.feicheng.blog.mapper: debug
   config:
     classpath: logback.xml
+
+
+  #Swagger的配置
+#swagger:
+#  title: feifei-blog
+#  description: 飞飞博客后台接口文档
+#  version: 1.0
+#  license: Apache License, Version 2.0
+#  license-url: https://www.apache.org/licenses/LICENSE-2.0.html
+#  terms-of-service-url: https://github.com/dyc87112/spring-boot-starter-swagger
+#  contact:
+#    name: feifei
+#    url: www.feicheng.xyz
+#    email: 1692454247@qq.com
+#  base-package: com.feicheng.blog.controller
+
+

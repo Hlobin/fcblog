@@ -41,9 +41,9 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
 
                     title: '图片',
 
-                    templet: function(d){
+                    templet: function (d) {
 
-                        return '<div ><img src="'+d.pictureUrl+'" alt="" width="50px" height="50px"></a></div>';
+                        return '<div ><img src="' + d.pictureUrl + '" alt="" width="50px" height="50px"></a></div>';
 
                     }
                 },
@@ -111,7 +111,7 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
     });
 
     //编辑首页图片信息
-    function editNews(edit) {
+    function editPicture(edit) {
 
         var index = layui.layer.open({
 
@@ -120,6 +120,8 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
             type: 2,
 
             content: "/admin/picture/edit.html",
+
+            area: ['1000px', '500px'],
 
             success: function (layero, index) {
 
@@ -159,83 +161,40 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
                 }, 500)
             }
         })
-        layui.layer.full(index);
-        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
-        $(window).on("resize", function () {
-            layui.layer.full(index);
-        })
+        // layui.layer.full(index);
+        // //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+        // $(window).on("resize", function () {
+        //     layui.layer.full(index);
+        // })
     }
 
-    // 预览文章
-    function articleLook(data) {
-
-        var index = layui.layer.open({
-
-            title: '预览文章',
-
-            type: 2,
-
-            content: '/admin/article/look.html',
-
-            success: function (layero, index) {
-
-                var body = layui.layer.getChildFrame('body', index);
-
-                if (data) {
-
-                    body.find(".news_title").text(data.articleName);
-
-                    body.find(".author").text("王若飞");
-
-                    body.find(".timer").text(data.articleDate);
-
-                    body.find(".news_about").text(data.articleAbstract);
-
-                    body.find(".news_infos").html(data.articleContent);
-
-                }
-            }
-        });
-
-        layui.layer.full(index);
-
-        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
-        $(window).on("resize", function () {
-
-            layui.layer.full(index);
-
-        })
-
-    }
 
     /**
      * 添加文章按钮操作
      */
     $(".addNews_btn").click(function () {
 
-        addNews();
+        addPicture();
 
     });
 
 
     /**
-     * 添加文章页面
+     * 添加首页图片
      */
-    function addNews() {
+    function addPicture() {
 
         var index = layui.layer.open({
-            title: "添加文章",
+
+            title: "添加首页图片",
+
             type: 2,
-            content: "/admin/picture/add.html"
+
+            content: "/admin/picture/add.html",
+
+            area: ['1000px', '500px']
+
         });
-
-        layui.layer.full(index);
-        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
-        $(window).on("resize", function () {
-
-            layui.layer.full(index);
-
-        })
     }
 
     //批量删除
@@ -291,40 +250,47 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
 
     //列表操作
     table.on('tool(newsList)', function (obj) {
+
         var layEvent = obj.event,
 
             data = obj.data;
 
         if (layEvent === 'edit') { //编辑
 
-            editNews(data);
+            editPicture(data);
 
         } else if (layEvent === 'del') { //删除
 
-            layer.confirm('确定删除此文章？', {icon: 3, title: '提示信息'}, function (index) {
+            layer.confirm('确定删除此首页图片？', {icon: 3, title: '提示信息'}, function (index) {
 
-                $.get("/articleController/deleteArticleById", {
+                $.post("/picture/delete", {
 
-                        articleId: data.id  //将需要删除的newsId作为参数传入
+                        id: data.id  //将需要删除的id作为参数传入
 
                     },
                     function (data) {
-                        if (data.info == '删除成功') {
 
-                            layer.msg("删除成功");
+                        if (data.code == '400') {
+
+                            layer.msg(data.info);
+
+                            return;
+
+                        }
+
+                        if (data.code == '500') {
+
+                            layer.msg(data.info);
+
+                            return;
+                        }
+
+                        if (data.code == 200) {
+
+                            layer.msg(data.info);
 
                             tableIns.reload();
-
-                            layer.close(index);
                         }
-
-                        if (data.info == '操作失败') {
-
-                            layer.msg("操作失败，请联系管理员");
-
-                            layer.close(index);
-                        }
-
                     })
             });
         } else if (layEvent === 'look') { //预览
@@ -333,4 +299,4 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl'], function () {
         }
     });
 
-})
+});

@@ -1,11 +1,14 @@
 package com.feicheng.blog.service.impl;
 
 import com.feicheng.blog.common.PageResult;
+import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.Article;
 import com.feicheng.blog.entity.Comment;
+import com.feicheng.blog.entity.FrontPicture;
 import com.feicheng.blog.entity.User;
 import com.feicheng.blog.mapper.ArticleMapper;
 import com.feicheng.blog.mapper.CommentMapper;
+import com.feicheng.blog.mapper.FrontPictureMapper;
 import com.feicheng.blog.mapper.UserMapper;
 import com.feicheng.blog.service.ArticleService;
 import com.feicheng.blog.utils.SendEmailUtil;
@@ -43,6 +46,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired(required = false)
     private UserMapper userMapper;
+
+    @Autowired(required = false)
+    private FrontPictureMapper frontPictureMapper;
 
     @Autowired
     private AmqpTemplate amqpTemplate;
@@ -145,6 +151,25 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     /**
+     * 发送消息更新数据
+     *
+     * @param type
+     */
+    private void sendRedisMsg(String type, String message) {
+
+        try {
+
+            this.amqpTemplate.convertAndSend("redis.index.picture." + type, message);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            logger.error("更新数据消息发送失败");
+        }
+    }
+
+    /**
      * 根据id查询文章
      *
      * @param id
@@ -214,18 +239,14 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     @Transactional
-    public Map<String, Object> deleteArticle(Integer id) {
+    public ResponseResult deleteArticle(Integer id) {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
         // 判断id是否为空
         if (id == null) {
 
-            map.put("message", "error");
-
-            map.put("result", "参数错误");
-
-            return map;
+            return new ResponseResult(400, "参数错误");
         }
 
         // 先删除该文章下的所有评论
@@ -246,19 +267,30 @@ public class ArticleServiceImpl implements ArticleService {
         // 判断是否删除成功
         if (count > 0) {
 
-            map.put("message", "success");
+            // 删除关联该文章的首页图片
+            // 创建模板
+            Example frontPictureExample = new Example(FrontPicture.class);
 
-            map.put("result", "删除成功");
+            Example.Criteria frontPictureCriteria = frontPictureExample.createCriteria();
 
-            return map;
+            // 设置删除条件
+            frontPictureCriteria.andEqualTo("articleId", id);
+
+            // 执行删除
+            count = this.frontPictureMapper.deleteByExample(frontPictureExample);
+
+            if (count > 0) {
+
+                // 发送消息更新redis中首页图片的数据
+                this.sendRedisMsg("update", "更新数据");
+
+                return new ResponseResult(200, "删除成功");
+            }
+
+            return new ResponseResult(500, "删除失败");
         }
 
-        map.put("message", "error");
-
-        map.put("result", "服务器错误");
-
-        return map;
-
+        return new ResponseResult(500, "删除失败");
     }
 
     /**

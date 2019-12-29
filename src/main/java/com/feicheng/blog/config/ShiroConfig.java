@@ -99,14 +99,14 @@ public class ShiroConfig {
 //        shiroFilterFactoryBean.setUnauthorizedUrl("/admin/login.html");
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 设置免认证 url
-//        String[] anonUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(feiChengProperties.getShiro().getAnonUrl(), ",");
-//
-//        for (String url : anonUrls) {
-//
-//            filterChainDefinitionMap.put(url, "anon");
-//
-//        }
+        //设置免认证 url
+        String[] anonUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(feiChengProperties.getShiro().getAnonUrl(), ",");
+
+        for (String url : anonUrls) {
+
+            filterChainDefinitionMap.put(url, "anon");
+
+        }
 
         Map<String, Filter> customisedFilter = new HashMap<>();
 
@@ -114,53 +114,67 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/static/**", "anon");
 
-        filterChainDefinitionMap.put("/admin/login.html", "anon");
+        filterChainDefinitionMap.put("/swagger/**", "anon");
 
-        filterChainDefinitionMap.put("/admin/register.html", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
 
-        filterChainDefinitionMap.put("/admin/activate/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
 
-        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
 
-        filterChainDefinitionMap.put("/register", "anon");
+//        filterChainDefinitionMap.put("/swagger-resources/configuration/ui/**", "anon");
+//
+//        filterChainDefinitionMap.put("/swagger-resources/configuration/security/**", "anon");
 
-        filterChainDefinitionMap.put("/logout", "anon");
-
-        filterChainDefinitionMap.put("/getCode", "anon");
-
-        filterChainDefinitionMap.put("/index.html", "anon");
-
-        filterChainDefinitionMap.put("/about.html", "anon");
-
-        filterChainDefinitionMap.put("/list.html", "anon");
-
-        filterChainDefinitionMap.put("/gbook.html", "anon");
-
-        filterChainDefinitionMap.put("/editor.html", "anon");
-
-        filterChainDefinitionMap.put("/article/detail/**", "anon");
-
-        filterChainDefinitionMap.put("/article/type/**", "anon");
-
-        filterChainDefinitionMap.put("/comment/add", "anon");
-
-        filterChainDefinitionMap.put("/contact/list", "anon");
-
-        filterChainDefinitionMap.put("/contact/add", "anon");
-
-        filterChainDefinitionMap.put("/api/**", "anon");
-
-        filterChainDefinitionMap.put("/css/**", "anon");
-
-        filterChainDefinitionMap.put("/js/**", "anon");
-
-        filterChainDefinitionMap.put("/images/**", "anon");
-
-        filterChainDefinitionMap.put("/lib/**", "anon");
-
-        filterChainDefinitionMap.put("/myJs/**", "anon");
-
-        filterChainDefinitionMap.put("/Content/**", "anon");
+//        filterChainDefinitionMap.put("/admin/login.html", "anon");
+//
+//        filterChainDefinitionMap.put("/admin/register.html", "anon");
+//
+//        filterChainDefinitionMap.put("/admin/activate/**", "anon");
+//
+//        filterChainDefinitionMap.put("/login", "anon");
+//
+//        filterChainDefinitionMap.put("/register", "anon");
+//
+//        filterChainDefinitionMap.put("/logout", "anon");
+//
+//        filterChainDefinitionMap.put("/getCode", "anon");
+//
+//        filterChainDefinitionMap.put("/index.html", "anon");
+//
+//        filterChainDefinitionMap.put("/about.html", "anon");
+//
+//        filterChainDefinitionMap.put("/list.html", "anon");
+//
+//        filterChainDefinitionMap.put("/gbook.html", "anon");
+//
+//        filterChainDefinitionMap.put("/editor.html", "anon");
+//
+//        filterChainDefinitionMap.put("/article/detail/**", "anon");
+//
+//        filterChainDefinitionMap.put("/article/type/**", "anon");
+//
+//        filterChainDefinitionMap.put("/comment/add", "anon");
+//
+//        filterChainDefinitionMap.put("/contact/list", "anon");
+//
+//        filterChainDefinitionMap.put("/contact/add", "anon");
+//
+//        filterChainDefinitionMap.put("/swagger-ui.html#/", "anon");
+//
+//        filterChainDefinitionMap.put("/api/**", "anon");
+//
+//        filterChainDefinitionMap.put("/css/**", "anon");
+//
+//        filterChainDefinitionMap.put("/js/**", "anon");
+//
+//        filterChainDefinitionMap.put("/images/**", "anon");
+//
+//        filterChainDefinitionMap.put("/lib/**", "anon");
+//
+//        filterChainDefinitionMap.put("/myJs/**", "anon");
+//
+//        filterChainDefinitionMap.put("/Content/**", "anon");
 
 
         // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了

@@ -1,6 +1,7 @@
 package com.feicheng.blog.service.impl;
 
 import com.feicheng.blog.common.PageResult;
+import com.feicheng.blog.common.ResponseResult;
 import com.feicheng.blog.entity.FrontPicture;
 import com.feicheng.blog.mapper.FrontPictureMapper;
 import com.feicheng.blog.service.FrontPictureService;
@@ -145,6 +146,8 @@ public class FrontPictureServiceImpl implements FrontPictureService {
         frontPicture.setPictureLook(frontPicture.getPictureLook().equals("on") ? "开放浏览" : "私密浏览");
 
         frontPicture.setPictureTop(frontPicture.getPictureTop().equals("checked") ? "checked" : "");
+
+        frontPicture.setArticleId(Integer.parseInt(frontPicture.getPictureContentUrl()));
 
         frontPicture.setPictureContentUrl(myselfAddress + "/article/detail/" + frontPicture.getPictureContentUrl());
 
@@ -356,7 +359,7 @@ public class FrontPictureServiceImpl implements FrontPictureService {
 
         try {
             // 发送信息
-            SendEmailUtil.sendEmail(myselfEmail,stringBuilder.toString());
+            SendEmailUtil.sendEmail(myselfEmail, stringBuilder.toString());
 
         } catch (Exception e) {
 
@@ -376,7 +379,7 @@ public class FrontPictureServiceImpl implements FrontPictureService {
         Boolean hasKey = this.stringRedisTemplate.hasKey(INDEX_PICTURE);
 
         // 若存在，则删除key值，重新载入数据
-        if (hasKey){
+        if (hasKey) {
 
             this.stringRedisTemplate.delete(INDEX_PICTURE);
 
@@ -418,5 +421,34 @@ public class FrontPictureServiceImpl implements FrontPictureService {
                 this.sendRedisMsg("error");
             }
         }
+    }
+
+    /**
+     * 删除文章
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public ResponseResult deletePicture(Integer id) {
+
+        if (id == null) {
+
+            return new ResponseResult(400, "参数错误");
+
+        }
+
+        // 执行删除
+        Integer count = this.frontPictureMapper.deleteByPrimaryKey(id);
+
+        if (count > 0) {
+
+            // 发送消息通知已有数据更新
+            this.sendRedisMsg("update");
+
+            return new ResponseResult(200, "删除成功");
+        }
+
+        return new ResponseResult(500, "删除失败");
     }
 }

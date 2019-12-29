@@ -275,7 +275,7 @@ layui.use(['form', 'layer', 'layedit', 'laydate', 'upload'], function () {
             }
         }
         , uploadFiles: {
-            url: 'your url',
+            url: '/upload/file',
             accept: 'file',
             acceptMime: 'file/*',
             size: '20480',
@@ -290,7 +290,7 @@ layui.use(['form', 'layer', 'layedit', 'laydate', 'upload'], function () {
         //视频： filepath --视频路径 imgpath --封面路径
         //附件： filepath --附件路径
         , calldel: {
-            url: 'your url',
+            url: '/upload/file',
             done: function (data) {
                 console.log(data);
             }
